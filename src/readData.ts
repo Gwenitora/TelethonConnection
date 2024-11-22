@@ -1,6 +1,7 @@
 import * as fs from 'fs/promises';
 import * as path from 'path';
 
+// NOTE: =================== Initialisations =================== //
 export type UserDatas = {
     link: string,
     name: string,
@@ -17,6 +18,8 @@ export type UserDatas = {
 }
 
 var global = 0;
+var globalObjectif = 0;
+var national = 0;
 
 const listOfPageTypes = [
     "animation-gaming",
@@ -33,6 +36,18 @@ const page = "https://mapage.telethon.fr/#/"
 const moneyPage = "https://mapage.telethon.fr/ajax/goal/peer?templatePeerId=5269&templateCollectorId="
 const donorsPage = "https://mapage.telethon.fr/ajax/peer/donor/list/#?limitStart=0&limitLength=999999"
 const regexToId: [string, string] = ['"https://mapage.telethon.fr/qrcode/', '"'];
+const nationalPage = "https://widgets.afm-telethon.fr/widget/compteur-national";
+
+// NOTE: =================== Getting Telethon datas =================== //
+const getNationalSum = async (): Promise<number> => {
+    const response = await fetch(nationalPage);
+    if (response.status !== 200) {
+        throw new Error(`HTTP error for national datas:\n  ${response.status}`);
+    }
+    const text = (await response.text()).replaceAll("\n", "").replaceAll("\t", "").replaceAll("\r", "").replaceAll(" ", "");
+    const sum = text.split('data-hydrate="total">')[1].split('</span>')[0];
+    return parseFloat(sum);
+}
 
 const getId = async (user: string, type: string): Promise<number> => {
     const response = await fetch(page.replace("#", type) + user);
@@ -61,9 +76,9 @@ const getMoney = async (user: string): Promise<{ [key in 'money' | 'objectif']: 
     if (response.status !== 200) {
         throw new Error(`HTTP error for user ${user}:\n  ${response.status}`);
     }
-    const text = (await response.text()).replaceAll("\n", "").replaceAll("\t", "").replaceAll("\r", "");
-    const money = text.split('class="sum-collector">')[1].split(' €')[0];
-    const objectif = text.split('class="float-end">Objectif : ')[1].split(' €')[0];
+    const text = (await response.text()).replaceAll("\n", "").replaceAll("\t", "").replaceAll("\r", "").replaceAll(" ", "");
+    const money = text.split('class="sum-collector">')[1].split('€')[0];
+    const objectif = text.split('class="float-end">Objectif:')[1].split('€')[0];
     return {
         money: parseFloat(money),
         objectif: parseFloat(objectif)
@@ -85,7 +100,7 @@ const getDonations = async (user: string): Promise<UserDatas["donations"]> => {
         var message = "";
         try {
             message = donations[i].split('</p>                                <p>')[1].split('</p>')[0];
-        } catch (err) { }
+        } catch (err) {}
         var toPush = {
             name: name.trim(),
             amount: parseFloat(amount.trim()),
@@ -99,6 +114,7 @@ const getDonations = async (user: string): Promise<UserDatas["donations"]> => {
     return donationsList;
 }
 
+// NOTE: =================== Get people with the list  =================== //
 const getAllNames = async (): Promise<string[]> => {
     const filePath = path.resolve(__dirname, '../datas/names.json');
     const data = await fs.readFile(filePath, 'utf-8');
@@ -106,12 +122,19 @@ const getAllNames = async (): Promise<string[]> => {
     return users;
 }
 
+// NOTE: =================== Group and save datas =================== //
 const getAllDatas = async (): Promise<number> => {
+
+    // init les variables
     const lastJson = await fs.readFile(path.resolve(__dirname, '../datas/datas.json'), 'utf-8');
     const cacheDatas: UserDatas[] = JSON.parse(lastJson);
     const users = await getAllNames();
     var usersData: UserDatas[] = [];
+
+    // pour chaque users
     for (let i = 0; i < users.length; i++) {
+
+        // Si l'id et le type de la personne sont déjà enregistrés
         if (cacheDatas.find((user: UserDatas) => user.name === users[i])) {
             const user = cacheDatas.find((user: UserDatas) => user.name === users[i]) as UserDatas;
             try {
@@ -127,10 +150,10 @@ const getAllDatas = async (): Promise<number> => {
                     donations: donations
                 });
                 continue;
-            } catch (err) {
-                console.error(err);
-            }
+            } catch (err) {console.error(err);}
         }
+
+        // À l'inverse, si les données ne sont pas enregistrées
         try {
             const type = await getType(users[i]);
             const id = await getId(users[i], type);
@@ -145,19 +168,26 @@ const getAllDatas = async (): Promise<number> => {
                 objectif: objectif,
                 donations: donations
             });
-        } catch (err) {
-            console.error(err);
-        }
+            
+        } catch (err) {console.error(err);}
+
     }
+
+    // sauvegarder la data que si un changement a été effectué
     if (lastJson !== JSON.stringify(usersData/*, null, 4*/)) {
         await fs.writeFile(path.resolve(__dirname, '../datas/datas.json'), JSON.stringify(usersData/*, null, 4*/));
     }
+
+    // retourner la somme totale des users listés, et calculer l'objectif global, et la somme national
     global = usersData.map((user) => user.money).reduce((a, b) => a + b, 0);
+    globalObjectif = usersData.map((user) => user.objectif).reduce((a, b) => a + b, 0);
+    national = await getNationalSum();
     return global;
 }
 
 export default getAllDatas;
 
+// NOTE: =================== Get saved datas =================== //
 export const getUserDatas = async (userInfo: string): Promise<UserDatas | undefined> => {
     const datas = await fs.readFile(path.resolve(__dirname, '../datas/datas.json'), 'utf-8');
     const users: UserDatas[] = JSON.parse(datas);
@@ -167,4 +197,12 @@ export const getUserDatas = async (userInfo: string): Promise<UserDatas | undefi
 
 export const getGlobal = (): number => {
     return global;
+}
+
+export const getGlobalObjectif = (): number => {
+    return globalObjectif;
+}
+
+export const getNational = (): number => {
+    return national;
 }
