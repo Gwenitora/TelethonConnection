@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "declaration": false,
+
+    "lib": [
+      "es2020",
+      "esnext",
+      "dom"
+    ],
+    "outDir": "./dist",
+    "resolveJsonModule": true,
+    "removeComments": true
+  },
+
+  "include": ["./src"]
+}
