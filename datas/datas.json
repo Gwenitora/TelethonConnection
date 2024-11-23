@@ -15,11 +15,21 @@
         "id": 6902,
         "money": 30,
         "objectif": 500,
+        "biggestDonator": {
+            "name": "Ghislaine D.",
+            "amount": 30,
+            "dons": [
+                {
+                    "amount": 30,
+                    "date": "il y a 1 jour"
+                }
+            ]
+        },
         "donations": [
             {
                 "name": "Ghislaine D.",
                 "amount": 30,
-                "date": "il y a 2 heures"
+                "date": "il y a 1 jour"
             }
         ]
     },
@@ -30,16 +40,26 @@
         "id": 6837,
         "money": 30,
         "objectif": 500,
+        "biggestDonator": {
+            "name": "Maxime R.",
+            "amount": 20,
+            "dons": [
+                {
+                    "amount": 20,
+                    "date": "il y a 3 jours"
+                }
+            ]
+        },
         "donations": [
             {
                 "name": "Maxime R.",
                 "amount": 20,
-                "date": "il y a 1 jour"
+                "date": "il y a 3 jours"
             },
             {
                 "name": "Matthieu C.",
                 "amount": 10,
-                "date": "il y a 1 jour",
+                "date": "il y a 3 jours",
                 "message": "Belle initiative !"
             }
         ]

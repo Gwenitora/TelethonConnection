@@ -9,6 +9,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@gscript/gtools": "^1.2.33",
     "express": "^4.21.1",
     "socket.io": "^4.8.1"
   },

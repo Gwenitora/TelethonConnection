@@ -1,7 +1,31 @@
 import * as fs from 'fs/promises';
 import * as path from 'path';
+import {json} from '@gscript/gtools';
+
+const DebugMode = true;
 
 // NOTE: =================== Initialisations =================== //
+type BiggestDonator = {
+    name: string,
+    amount: number,
+    dons: {
+        amount: number,
+        date: string,
+        message?: string
+    }[]
+}
+
+type BiggestDonatorFor = {
+    for: string,
+    name: string,
+    amount: number,
+    dons: {
+        amount: number,
+        date: string,
+        message?: string
+    }[]
+}
+
 export type UserDatas = {
     link: string,
     name: string,
@@ -9,6 +33,7 @@ export type UserDatas = {
     id: number,
     money: number,
     objectif: number,
+    biggestDonator?: BiggestDonator
     donations: {
         name: string,
         amount: number,
@@ -19,7 +44,13 @@ export type UserDatas = {
 
 var global = 0;
 var globalObjectif = 0;
-var national = 0;
+var national = 0
+var biggestDonator: BiggestDonatorFor = {
+    for: "NaN",
+    name: "NaN",
+    amount: 0,
+    dons: []
+};
 
 const listOfPageTypes = [
     "animation-gaming",
@@ -85,6 +116,37 @@ const getMoney = async (user: string): Promise<{ [key in 'money' | 'objectif']: 
     }
 }
 
+const CalculateBiggestDonator = (donations: {
+    name: string,
+    amount: number,
+    date: string,
+    message?: string
+}[]): BiggestDonator => {
+    donations.sort(() => -1);
+    var GroupedDonations: BiggestDonator[] = []
+
+    for (let i = 0; i < donations.length; i++) {
+        const index = GroupedDonations.findIndex((don) => don.name === donations[i].name);
+        var thatDonation = json.clone(donations[i]);
+        delete (thatDonation as any).name;
+
+        if (index === -1) {
+            GroupedDonations.push({
+                name: donations[i].name,
+                amount: donations[i].amount,
+                dons: [thatDonation]
+            });
+        } else {
+            GroupedDonations[index].amount += donations[i].amount;
+            GroupedDonations[index].dons.push(thatDonation);
+        }
+    }
+
+    GroupedDonations.sort((a, b) => b.amount - a.amount);
+
+    return GroupedDonations[0];
+}
+
 const getDonations = async (user: string): Promise<UserDatas["donations"]> => {
     const response = await fetch(donorsPage.replace("#", user));
     if (response.status !== 200) {
@@ -100,7 +162,7 @@ const getDonations = async (user: string): Promise<UserDatas["donations"]> => {
         var message = "";
         try {
             message = donations[i].split('</p>                                <p>')[1].split('</p>')[0];
-        } catch (err) {}
+        } catch (err) { }
         var toPush = {
             name: name.trim(),
             amount: parseFloat(amount.trim()),
@@ -140,6 +202,7 @@ const getAllDatas = async (): Promise<number> => {
             try {
                 const { money, objectif } = await getMoney(user.id.toString());
                 const donations = money === user.money ? user.donations : await getDonations(user.id.toString());
+                const BiggestDonator = CalculateBiggestDonator(json.clone(donations));
                 usersData.push({
                     link: user.link,
                     name: user.name,
@@ -147,10 +210,11 @@ const getAllDatas = async (): Promise<number> => {
                     id: user.id,
                     money: money,
                     objectif: objectif,
+                    biggestDonator: BiggestDonator,
                     donations: donations
                 });
                 continue;
-            } catch (err) {console.error(err);}
+            } catch (err) { console.error(err); }
         }
 
         // À l'inverse, si les données ne sont pas enregistrées
@@ -159,6 +223,7 @@ const getAllDatas = async (): Promise<number> => {
             const id = await getId(users[i], type);
             const { money, objectif } = await getMoney(id.toString());
             const donations = await getDonations(id.toString());
+            const BiggestDonator = CalculateBiggestDonator(json.clone(donations));
             usersData.push({
                 link: page.replace("#", type) + users[i],
                 name: users[i],
@@ -166,17 +231,43 @@ const getAllDatas = async (): Promise<number> => {
                 id: id,
                 money: money,
                 objectif: objectif,
+                biggestDonator: BiggestDonator,
                 donations: donations
             });
-            
-        } catch (err) {console.error(err);}
+
+        } catch (err) { console.error(err); }
 
     }
 
     // sauvegarder la data que si un changement a été effectué
-    if (lastJson !== JSON.stringify(usersData/*, null, 4*/)) {
-        await fs.writeFile(path.resolve(__dirname, '../datas/datas.json'), JSON.stringify(usersData/*, null, 4*/));
+    if (lastJson !== JSON.stringify(usersData, null, DebugMode ? 4 : 0)) {
+        await fs.writeFile(path.resolve(__dirname, '../datas/datas.json'), JSON.stringify(usersData, null, DebugMode ? 4 : 0));
     }
+
+    // récupération du plus gros donateur
+    const AllDonators = usersData.map(
+        (user) => {
+            return user.donations.map(
+                (don) => {
+                    var withFor: {
+                        for: string,
+                        name: string,
+                        amount: number,
+                        date: string,
+                        message?: string
+                    } = don as any;
+                    withFor.for = user.name;
+                    return withFor;
+                }
+            );
+        }
+    ).flat();
+    biggestDonator = CalculateBiggestDonator(json.clone(AllDonators) as {
+        name: string,
+        amount: number,
+        date: string,
+        message?: string
+    }[]) as BiggestDonatorFor;
 
     // retourner la somme totale des users listés, et calculer l'objectif global, et la somme national
     global = usersData.map((user) => user.money).reduce((a, b) => a + b, 0);
@@ -191,8 +282,12 @@ export default getAllDatas;
 export const getUserDatas = async (userInfo: string): Promise<UserDatas | undefined> => {
     const datas = await fs.readFile(path.resolve(__dirname, '../datas/datas.json'), 'utf-8');
     const users: UserDatas[] = JSON.parse(datas);
-    const finaleDatas = users.find((user: UserDatas) => user.name === userInfo);
-    return finaleDatas ? finaleDatas : undefined;
+    const finaleDatas = users.find((user: UserDatas) => user.name === userInfo || user.id.toString() === userInfo || user.link === userInfo);
+    return finaleDatas;
+}
+
+export const getBiggestDonator = (): BiggestDonatorFor => {
+    return biggestDonator;
 }
 
 export const getGlobal = (): number => {

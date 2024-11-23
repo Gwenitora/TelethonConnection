@@ -1,0 +1,23 @@
+$warlockColor: #6a83ff;
+$errorColor: #ff6b6b;
+
+* {
+    margin: 0 ! important;
+    padding: 0 ! important;
+    overflow: hidden;
+    text-align: center;
+    font-family: Arial, sans-serif;
+
+    body {
+        background-color: #00000000;
+        border: 0 ! important;
+
+        > div {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+}

@@ -1,0 +1,106 @@
+$warlockColor: #6a83ff;
+$errorColor: #ff6b6b;
+
+* {
+    font-family: Arial, sans-serif;
+
+    body {
+        background-color: #2d2d2d;
+        color: #ffffff;
+        padding-right: 30px;
+        margin: 2.5vw 2.5vh;
+        padding: 0;
+
+        input[type=button] {
+            appearance: none;
+            border: .2em solid $warlockColor;
+            background: rgba($warlockColor, .1);
+            padding: .85em 1.5em;
+            color: $warlockColor;
+            border-radius: 2em;
+            transition: .25s;
+            &:hover {
+                background: rgba($warlockColor, .25);
+            }
+        }
+
+        input[type=text] {
+            appearance: none;
+            border: none;
+            outline: none;
+            border-bottom: .2em solid $warlockColor;
+            background: rgba($warlockColor, .1);
+            border-radius: .4em .4em .2rem .2rem;
+            padding: .4em 1vw;
+            color: $warlockColor;
+            min-width: 40vw;
+
+            &::placeholder {
+                color: rgba($warlockColor, .4);
+            }
+
+            &:focus {
+                background: rgba($warlockColor, .25);
+            }
+
+            &.error {
+                border-color: $errorColor;
+                background: rgba(darken($errorColor, 10%), .1);
+
+                &:focus {
+                    background: rgba(darken($errorColor, 10%), .25);
+                }
+            }
+        }
+
+        span.validity {
+            position: absolute;
+            padding-left: 5px;
+
+            &.valid {
+                color: #008000;
+                content: "✓";
+            }
+
+            &.invalid {
+                color: #800000;
+                content: "✗";
+            }
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-top: 0;
+        }
+
+        div.horParts {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1em;
+
+            > * {
+                width: 45vw;
+            }
+        }
+
+        div.flexLeft {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: .8vw;
+        }
+
+        div.preview {
+            iframe#preview {
+                background-color: darken(#ffffff, 25%);
+                border-radius: .4em;
+                width: 45vw;
+            }
+        }
+
+        h2 {
+            font-size: .05em;
+            margin-top: 1em;
+        }
+    }
+}
