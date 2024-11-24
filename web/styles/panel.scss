@@ -1,76 +1,121 @@
 $warlockColor: #6a83ff;
 $errorColor: #ff6b6b;
+$bgColor: #2d2d2d;
 
 * {
     font-family: Arial, sans-serif;
 
     body {
-        background-color: #2d2d2d;
+        background-color: $bgColor;
         color: #ffffff;
         padding-right: 30px;
-        margin: 2.5vw 2.5vh;
+        margin: 2.5vh 2.5vw;
         padding: 0;
 
-        input[type=button] {
+        input[type="button"] {
             appearance: none;
-            border: .2em solid $warlockColor;
-            background: rgba($warlockColor, .1);
-            padding: .85em 1.5em;
+            border: 0.2em solid $warlockColor;
+            background: rgba($warlockColor, 0.1);
+            padding: 0.85em 1.5em;
             color: $warlockColor;
             border-radius: 2em;
-            transition: .25s;
+            transition: 0.25s;
             &:hover {
-                background: rgba($warlockColor, .25);
+                background: $warlockColor;
+                color: $bgColor;
             }
         }
 
-        input[type=text] {
+        input[type="text"] {
             appearance: none;
             border: none;
             outline: none;
-            border-bottom: .2em solid $warlockColor;
-            background: rgba($warlockColor, .1);
-            border-radius: .4em .4em .2rem .2rem;
-            padding: .4em 1vw;
+            border-bottom: 0.2em solid $warlockColor;
+            background: rgba($warlockColor, 0.1);
+            border-radius: 0.4em 0.4em 0.2rem 0.2rem;
+            padding: 0.4em 1vw;
             color: $warlockColor;
-            min-width: 40vw;
+            width: 40vw;
 
             &::placeholder {
-                color: rgba($warlockColor, .4);
+                color: rgba($warlockColor, 0.4);
             }
 
             &:focus {
-                background: rgba($warlockColor, .25);
+                background: rgba($warlockColor, 0.25);
             }
 
             &.error {
                 border-color: $errorColor;
-                background: rgba(darken($errorColor, 10%), .1);
+                background: rgba(darken($errorColor, 10%), 0.1);
 
                 &:focus {
-                    background: rgba(darken($errorColor, 10%), .25);
+                    background: rgba(darken($errorColor, 10%), 0.25);
                 }
             }
         }
 
-        span.validity {
-            position: absolute;
-            padding-left: 5px;
-
-            &.valid {
-                color: #008000;
-                content: "✓";
-            }
-
-            &.invalid {
-                color: #800000;
-                content: "✗";
+        input[type="radio"] {
+            appearance: none;
+            background-color: rgba($warlockColor, 0.25);
+            margin: 0;
+            font: inherit;
+            color: $warlockColor;
+            width: 1.15em;
+            height: 1.15em;
+            border: .15em solid currentColor;
+            border-radius: 50%;
+            place-content: center;
+            margin-right: 5px;
+            transition: .25s;
+            &:checked {
+                transform: scale(1);
+                background-color: lighten($warlockColor, 15%);
             }
         }
 
-        h1 {
-            font-size: 2em;
-            margin-top: 0;
+        input[type=color] { 
+            padding: .3em;
+            border: none;
+            width: 2em;
+            height: 2em;
+            border-radius: 20%;
+            margin-right: 5px;
+            background-color: $warlockColor;
+            &::-webkit-color-swatch {
+                border: none;
+                border-radius: 20%;
+            }
+            &::-webkit-color-swatch-wrapper {
+                padding: 0;
+            }
+        }
+
+        input[type=range] {
+            appearance: none;
+            background: transparent;
+            width: 40vw;
+            @mixin slider-thumb {
+                appearance: none;
+                width: 1.5em;
+                height: 1.5em;
+                border-radius: 50%;
+                background: $bgColor;
+                border: .2em solid $warlockColor;
+                margin-top: -3px;
+            }
+            @mixin slider-track {
+                background: $warlockColor;
+                width: 100%;
+                border-radius: 1vmin;
+                height: .5em;
+            }
+            &::-webkit-slider-thumb { margin-top: -8px; @include slider-thumb }
+            &::-moz-range-thumb { @include slider-thumb }
+            &::-ms-thumb { @include slider-thumb }
+            &::-webkit-slider-runnable-track { @include slider-track }
+            &::-moz-range-track { @include slider-track }
+            &::-ms-track { @include slider-track }
         }
 
         div.horParts {
@@ -80,6 +125,26 @@ $errorColor: #ff6b6b;
 
             > * {
                 width: 45vw;
+                overflow: visible;
+            }
+
+            div.preview {
+                overflow: auto;
+                width: 45vw;
+                height: calc(100vh - 100px);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                iframe#preview {
+                    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('/transparentTexture.jpg');
+                    background-repeat: repeat;
+                }
+            }
+
+            form {
+                * {
+                    margin-top: 0.5em;
+                }
             }
         }
 
@@ -87,20 +152,29 @@ $errorColor: #ff6b6b;
             display: flex;
             justify-content: flex-start;
             align-items: center;
-            gap: .8vw;
+            gap: 0.8vw;
         }
 
-        div.preview {
-            iframe#preview {
-                background-color: darken(#ffffff, 25%);
-                border-radius: .4em;
-                width: 45vw;
-            }
+        h1 {
+            font-size: 2em;
+            margin-top: 0;
         }
 
         h2 {
-            font-size: .05em;
+            font-size: 0.05em;
             margin-top: 1em;
+        }
+    }
+
+    @for $i from 0 through 1080 {
+        .width-#{$i} {
+            width: #{$i}px !important;
+        }
+    }
+
+    @for $i from 0 through 1920 {
+        .height-#{$i} {
+            height: #{$i}px !important;
         }
     }
 }

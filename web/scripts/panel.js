@@ -9,6 +9,26 @@ socket.onAny((event, datas) => {
 const uname = document.getElementById("uname-id-link-field");
 const preview = document.getElementById("preview");
 const outputLink = document.getElementById("outputLink");
+const CagnType = {
+  Perso: document.getElementById("CagnPerso"),
+  Global: document.getElementById("CagnQuest"),
+  National: document.getElementById("CagnNatio"),
+};
+const format = {
+  Default: document.getElementById("recolted"),
+  Complete: document.getElementById("recoltedObjectif"),
+  Objectif: document.getElementById("objectif"),
+};
+const txtColor = document.getElementById("txtColor");
+const bgColor = document.getElementById("bgColor");
+const bgTransparency = document.getElementById("bgTransparency");
+const bgTransparencyPreview = document.getElementById("bgTransparencyPreview");
+const borderRadius = document.getElementById("borderRadius");
+const borderRadiusPreview = document.getElementById("borderRadiusPreview");
+const widthAsset = document.getElementById("widthAsset");
+const widthAssetPreview = document.getElementById("widthAssetPreview");
+const heightAsset = document.getElementById("heightAsset");
+const heightAssetPreview = document.getElementById("heightAssetPreview");
 var pseudo = undefined;
 var previewLink = "/widget";
 
@@ -16,20 +36,47 @@ function Copy(copyText) {
   navigator.clipboard.writeText(copyText);
 
   const copyButton = document.getElementById("copyButton");
-  copyButton.value = "Copier !!";
+  copyButton.value = "Copied !!";
   setTimeout(() => {
     copyButton.value = "Copy";
   }, 1000);
 }
 
 const generateLink = () => {
-  if (pseudo === undefined) {
+  var options = [];
+  if (pseudo === undefined || !CagnType.Perso.checked) {
     previewLink = "/widget";
+    if (CagnType.National.checked) {
+      options.push("national");
+    }
   } else {
     previewLink = `/widget/${pseudo}`;
   }
+  if (format.Complete.checked) {
+    options.push("complete");
+  } else if (format.Objectif.checked) {
+    options.push("objectif");
+  }
+  if (txtColor.value !== "" && txtColor.value !== "#000000") {
+    options.push(`txtColor=${txtColor.value.replace("#", "")}`);
+  }
+  var transp = parseInt(bgTransparency.value).toString(16);
+  if (transp.length <= 1) transp = "0" + transp;
+  if (
+    bgColor.value + transp !== "0" &&
+    bgColor.value + transp !== "#ffffff00" &&
+    transp !== "00"
+  ) {
+    options.push(`bgColor=${(bgColor.value + transp).replace("#", "")}`);
+  }
+  if (borderRadius.value !== "100") {
+    options.push(`borderR=${borderRadius.value}`);
+  }
 
-  previewLink = window.location.origin + previewLink;
+  previewLink =
+    window.location.origin +
+    previewLink +
+    (options.length > 0 ? "?" + options.join("&") : "");
   if (preview.src === previewLink) return;
   preview.src = previewLink;
   outputLink.innerText = previewLink;
@@ -69,3 +116,35 @@ const copyLink = () => {
 const newTab = () => {
   window.open(previewLink, "_blank");
 };
+
+const updateBgTransparency = () => {
+  bgTransparencyPreview.innerText = bgTransparency.value;
+};
+updateBgTransparency();
+
+const updateBorderRadius = () => {
+  borderRadiusPreview.innerText = borderRadius.value;
+};
+updateBorderRadius();
+
+const updateWidthAsset = () => {
+  widthAssetPreview.innerText = widthAsset.value;
+  preview.width = widthAsset.value;
+  console.log(preview.classList);
+  preview.classList.remove(
+    preview.classList.value.split(" ").find((c) => c.startsWith("width-"))
+  );
+  preview.classList.add(`width-${widthAsset.value}`);
+};
+updateWidthAsset();
+
+const updateHeightAsset = () => {
+  heightAssetPreview.innerText = heightAsset.value;
+  preview.height = heightAsset.value;
+  console.log(preview.classList);
+  preview.classList.remove(
+    preview.classList.value.split(" ").find((c) => c.startsWith("height-"))
+  );
+  preview.classList.add(`height-${heightAsset.value}`);
+};
+updateHeightAsset();

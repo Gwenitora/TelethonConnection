@@ -6,19 +6,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="/favicon.ico" />
     <link rel="stylesheet" href="/styles/panel.css">
-    <title>Téléthon asset panel</title>
+    <title>Panel - Téléthon asset</title>
 </head>
 <body id="body">
-    <h1>Cagnottes - Assets</h1>
+    <h1>Cagnottes - Assets Panel</h1>
     <div class="horParts">
         <div class="preview">
-            <iframe id="preview" src="/widget/WarlockProd" frameborder="0" title="Preview"></iframe>
+            <iframe class="width-1 height-1" id="preview" src="/widget/WarlockProd" frameborder="0" title="Preview"></iframe>
         </div>
         <form>
-            <div class="textField" id="uname-id-link">
-                <input id="uname-id-link-field" class="error" type="text" placeholder="Entrer votre page de collecte ici" onfocus="updatePseudo()" onFocusout="updatePseudo()">
-                <span class="validity invalid"></span>
-            </div>
+            <input id="uname-id-link-field" class="error" type="text" placeholder="Entrer votre page de collecte ici" onfocus="updatePseudo()" onFocusout="updatePseudo()"><br>
+
+            <label><input type="radio" name="cagnotteType" title="Cagnotte Perso"    id="CagnPerso" checked>Cagnotte Perso   </label><br>
+            <label><input type="radio" name="cagnotteType" title="Cagnotte Quest"    id="CagnQuest"        >Cagnotte Quest   </label><br>
+            <label><input type="radio" name="cagnotteType" title="Cagnotte National" id="CagnNatio"        >Cagnotte National</label><br><br>
+
+            <label><input type="radio" name="format" title="Récolté"          id="recolted" checked>Récolté</label><br>
+            <label><input type="radio" name="format" title="Récolté/Objectif" id="recoltedObjectif">Récolté/Objectif</label><br>
+            <label><input type="radio" name="format" title="Objectif" id="objectif">Objectif</label><br><br>
+            
+            <label><input type="color" name="txtColor" title="Couleur du texte" id="txtColor" value="#000000">Couleur du texte</label><br>
+
+            <label><input type="color" name="bgColor" title="Couleur du fond" id="bgColor" value="#ffffff">Couleur du fond</label><br>
+            <label><br>Transparence du fond: <span id="bgTransparencyPreview"></span><input type="range" name="bgTransparency" title="Transparence du fond" id="bgTransparency" value="0" min="0" max="255" step="1" oninput="updateBgTransparency()"></label><br>
+
+            <label><br>Arrondis: <span id="borderRadiusPreview"></span>%<input type="range" name="borderRadius" title="Bordure du fond" id="borderRadius" value="100" min="0" max="100" step="0.1" oninput="updateBorderRadius()"></label><br>
+
+            <label><br>Longueur (Width): <span id="widthAssetPreview"></span>px<input type="range" name="widthAsset" title="Longueur" id="widthAsset" value="100" min="1" max="1080" step="1" oninput="updateWidthAsset()"></label><br>
+            <label><br>Hauteur (Height): <span id="heightAssetPreview"></span>px<input type="range" name="heightAsset" title="Longueur" id="heightAsset" value="25" min="1" max="1920" step="1" oninput="updateHeightAsset()"></label><br>
         </form>
     </div>
     <div class="flexLeft">
