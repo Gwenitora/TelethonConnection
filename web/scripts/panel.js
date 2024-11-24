@@ -94,7 +94,7 @@ socket.on("personal", (datas) => {
   if (datas === undefined || datas === null) {
     uname.className = "error";
     uname.title =
-      "Utilisateur non trouver dans la liste des streamers Quest Education pour le Téléthon\nÀ la place, voici la cagnotte global\n\nSi vous pensez que c'est une erreur, veuillez contacter un administrateur.";
+      "Utilisateur non trouver dans la liste des streamers Quest Education pour le Téléthon\nÀ la place, voici la cagnotte quest\n\nSi vous pensez que c'est une erreur, veuillez contacter un administrateur.";
     pseudo = undefined;
   } else {
     uname.className = "";
