@@ -1,14 +1,10 @@
 const socket = io();
-const debugMode = true;
-
-socket.onAny((event, datas) => {
-  if (!debugMode || event.startsWith("-")) return;
-  console.log(`Event named:\n  ${event}\nIs receive with datas:\n  `, datas);
-});
 
 const uname = document.getElementById("uname-id-link-field");
+const previewBox = document.getElementsByClassName("preview")[0];
 const preview = document.getElementById("preview");
 const outputLink = document.getElementById("outputLink");
+
 const CagnType = {
   Perso: document.getElementById("CagnPerso"),
   Global: document.getElementById("CagnQuest"),
@@ -19,16 +15,25 @@ const format = {
   Complete: document.getElementById("recoltedObjectif"),
   Objectif: document.getElementById("objectif"),
 };
+
 const txtColor = document.getElementById("txtColor");
 const bgColor = document.getElementById("bgColor");
+
 const bgTransparency = document.getElementById("bgTransparency");
 const bgTransparencyPreview = document.getElementById("bgTransparencyPreview");
+
 const borderRadius = document.getElementById("borderRadius");
 const borderRadiusPreview = document.getElementById("borderRadiusPreview");
+
+const fontSize = document.getElementById("fontSize");
+const fontSizePreview = document.getElementById("fontSizePreview");
+
 const widthAsset = document.getElementById("widthAsset");
 const widthAssetPreview = document.getElementById("widthAssetPreview");
+
 const heightAsset = document.getElementById("heightAsset");
 const heightAssetPreview = document.getElementById("heightAssetPreview");
+
 var pseudo = undefined;
 var previewLink = "/widget";
 
@@ -72,6 +77,9 @@ const generateLink = () => {
   if (borderRadius.value !== "100") {
     options.push(`borderR=${borderRadius.value}`);
   }
+  if (fontSize.value !== "40") {
+    options.push(`fontS=${fontSize.value}`);
+  }
 
   previewLink =
     window.location.origin +
@@ -107,6 +115,8 @@ const updatePseudo = () => {
 
 setInterval(() => {
   generateLink();
+  widthAsset.max = previewBox.clientWidth;
+  heightAsset.max = previewBox.clientHeight;
 }, 50);
 
 const copyLink = () => {
@@ -126,6 +136,11 @@ const updateBorderRadius = () => {
   borderRadiusPreview.innerText = borderRadius.value;
 };
 updateBorderRadius();
+
+const updateFontSize = () => {
+  fontSizePreview.innerText = fontSize.value;
+};
+updateFontSize();
 
 const updateWidthAsset = () => {
   widthAssetPreview.innerText = widthAsset.value;

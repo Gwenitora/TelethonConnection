@@ -31,9 +31,13 @@
             <label><br>Transparence du fond: <span id="bgTransparencyPreview"></span><input type="range" name="bgTransparency" title="Transparence du fond" id="bgTransparency" value="0" min="0" max="255" step="1" oninput="updateBgTransparency()"></label><br>
 
             <label><br>Arrondis: <span id="borderRadiusPreview"></span>%<input type="range" name="borderRadius" title="Bordure du fond" id="borderRadius" value="100" min="0" max="100" step="0.1" oninput="updateBorderRadius()"></label><br>
-
-            <label><br>Longueur (Width): <span id="widthAssetPreview"></span>px<input type="range" name="widthAsset" title="Longueur" id="widthAsset" value="100" min="1" max="1080" step="1" oninput="updateWidthAsset()"></label><br>
-            <label><br>Hauteur (Height): <span id="heightAssetPreview"></span>px<input type="range" name="heightAsset" title="Longueur" id="heightAsset" value="25" min="1" max="1920" step="1" oninput="updateHeightAsset()"></label><br>
+            
+            <p class="warn"><br>Il est déconseiller de toucher au prochains paramètres, malgré que cela reste possible</p>
+            <label>Taille de la police: <span id="fontSizePreview"></span>px<input type="range" name="fontSize" title="Taille de la police" id="fontSize" value="40" min="1" max="1000" step="1" oninput="updateFontSize()"></label><br>
+            
+            <p class="warn"><br>La taille (qui suit) n'a aucun effet sur l'asset final, mais vous permet de faire des test avant d'importer dans obs studio ou streamlab</p>
+            <label>Longueur (Width): <span id="widthAssetPreview"></span>px<input type="range" name="widthAsset" title="Longueur" id="widthAsset" value="338" min="1" max="1080" step="1" oninput="updateWidthAsset()"></label><br>
+            <label><br>Hauteur (Height): <span id="heightAssetPreview"></span>px<input type="range" name="heightAsset" title="Longueur" id="heightAsset" value="80" min="1" max="1920" step="1" oninput="updateHeightAsset()"></label><br>
         </form>
     </div>
     <div class="flexLeft">

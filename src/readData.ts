@@ -2,7 +2,7 @@ import * as fs from 'fs/promises';
 import * as path from 'path';
 import {json} from '@gscript/gtools';
 
-const DebugMode = true;
+const DebugMode = false;
 
 // NOTE: =================== Initialisations =================== //
 type BiggestDonator = {

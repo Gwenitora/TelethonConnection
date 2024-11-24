@@ -1,10 +1,4 @@
 const socket = io();
-const debugMode = true;
-
-socket.onAny((event, datas) => {
-  if (!debugMode || event.startsWith("-")) return;
-  console.log(`Event named:\n  ${event}\nIs receive with datas:\n  `, datas);
-});
 
 const getCurrentURL = () => window.location.href;
 let params = new URLSearchParams(document.location.search);
@@ -29,6 +23,7 @@ const getFormat = () =>
     : params.get("objectif") !== null && !isNational()
     ? "$O €"
     : "$R €";
+const getFontSize = () => params.get("fontS") || 40;
 
 socket.on("global", (data) => {
   if (isGlobal()) {
@@ -75,6 +70,7 @@ const interval = () => {
   document.title = title + " - " + startTitle;
 
   cagnotte.style.color = getTxtColor();
+  cagnotte.style.fontSize = getFontSize() + "px";
   container.style.backgroundColor = getBgColor();
   container.style.borderRadius =
     (getBorderRadius() / 200) *

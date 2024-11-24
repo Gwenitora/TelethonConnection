@@ -124,14 +124,14 @@ $bgColor: #2d2d2d;
             margin-top: 1em;
 
             > * {
+                height: calc(100vh - 100px);
                 width: 45vw;
-                overflow: visible;
+                overflow: hidden;
             }
 
             div.preview {
                 overflow: auto;
                 width: 45vw;
-                height: calc(100vh - 100px);
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -142,6 +142,7 @@ $bgColor: #2d2d2d;
             }
 
             form {
+                overflow-y: auto;
                 * {
                     margin-top: 0.5em;
                 }
@@ -163,6 +164,12 @@ $bgColor: #2d2d2d;
         h2 {
             font-size: 0.05em;
             margin-top: 1em;
+        }
+
+        .warn {
+            color: $errorColor;
+            font-size: 0.8em;
+            margin-top: 0.5em;
         }
     }
 
