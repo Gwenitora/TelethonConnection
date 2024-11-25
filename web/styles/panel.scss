@@ -171,6 +171,12 @@ $bgColor: #2d2d2d;
             font-size: 0.8em;
             margin-top: 0.5em;
         }
+
+        div.credits {
+            background-color: darken($bgColor, 10%);
+            padding: 20px;
+            margin-top: 20px;
+        }
     }
 
     @for $i from 0 through 1080 {
