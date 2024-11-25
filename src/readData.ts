@@ -72,7 +72,8 @@ const nationalPage = "https://widgets.afm-telethon.fr/widget/compteur-national";
 const getNationalSum = async (): Promise<number> => {
     const response = await fetch(nationalPage);
     if (response.status !== 200) {
-        throw new Error(`HTTP error for national datas:\n  ${response.status}`);
+        console.error(`HTTP error for national datas:\n  ${response.status}`);
+        return national;
     }
     const text = (await response.text()).replaceAll("\n", "").replaceAll("\t", "").replaceAll("\r", "").replaceAll(" ", "");
     const sum = text.split('data-hydrate="total">')[1].split('</span>')[0];
@@ -82,7 +83,8 @@ const getNationalSum = async (): Promise<number> => {
 const getId = async (user: string, type: string): Promise<number> => {
     const response = await fetch(page.replace("#", type) + user);
     if (response.status !== 200) {
-        throw new Error(`HTTP error for user ${user}:\n  ${response.status}`);
+        console.error(`HTTP error for user ${user}:\n  ${response.status}`);
+        return -1;
     }
     var text = (await response.text()).replaceAll("\n", "").replaceAll("\t", "").replaceAll("\r", "").replaceAll(" ", "");
     text = text.split(regexToId[0])[1].split(regexToId[1])[0];
@@ -98,13 +100,15 @@ const getType = async (user: string): Promise<string> => {
         }
         return listOfPageTypes[i];
     }
-    throw new Error(`404 - not found user: "${user}"`);
+    console.error(`404 - not found user: "${user}"`);
+    return listOfPageTypes[0];
 }
 
 const getMoney = async (user: string): Promise<{ [key in 'money' | 'objectif']: number }> => {
     const response = await fetch(moneyPage + user);
     if (response.status !== 200) {
-        throw new Error(`HTTP error for user ${user}:\n  ${response.status}`);
+        console.error(`HTTP error for user ${user}:\n  ${response.status}`);
+        return { money: -1, objectif: -1 };
     }
     const text = (await response.text()).replaceAll("\n", "").replaceAll("\t", "").replaceAll("\r", "").replaceAll(" ", "");
     const money = text.split('class="sum-collector">')[1].split('€')[0];
@@ -149,7 +153,8 @@ const CalculateBiggestDonator = (donations: {
 const getDonations = async (user: string): Promise<UserDatas["donations"]> => {
     const response = await fetch(donorsPage.replace("#", user));
     if (response.status !== 200) {
-        throw new Error(`HTTP error for user ${user}:\n  ${response.status}`);
+        console.error(`HTTP error for user ${user}:\n  ${response.status}`);
+        return [];
     }
     const text = (await response.text()).replaceAll("\n", "").replaceAll("\t", "").replaceAll("\r", "");
     const donations = text.split('class="pt-4">');
