@@ -1,6 +1,6 @@
-import * as fs from 'fs/promises';
-import * as path from 'path';
-import {json} from '@gscript/gtools';
+import fs from 'fs/promises';
+import path from 'path';
+import { json } from '@gscript/gtools';
 import { DebugMode } from '.';
 
 // NOTE: =================== Initialisations =================== //
@@ -178,8 +178,18 @@ const getDonations = async (user: string): Promise<UserDatas["donations"]> => {
 // NOTE: =================== Get people with the list  =================== //
 const getAllNames = async (): Promise<string[]> => {
     const filePath = path.resolve(__dirname, '../datas/names.json');
-    const data = await fs.readFile(filePath, 'utf-8');
-    const users = JSON.parse(data);
+    var data;
+    try {
+        data = await fs.readFile(filePath, 'utf-8');
+    } catch (err) {
+        data = '[]';
+    }
+    var users;
+    try {
+        users = JSON.parse(data);
+    } catch (err) {
+        users = [];
+    }
     return users;
 }
 
@@ -187,8 +197,20 @@ const getAllNames = async (): Promise<string[]> => {
 const getAllDatas = async (): Promise<number> => {
 
     // init les variables
-    const lastJson = await fs.readFile(path.resolve(__dirname, '../datas/datas.json'), 'utf-8');
-    const cacheDatas: UserDatas[] = JSON.parse(lastJson);
+    var _lastJson;
+    try {
+        _lastJson = await fs.readFile(path.resolve(__dirname, '../datas/datas.json'), 'utf-8');
+    } catch (err) {
+        _lastJson = '[]';
+    }
+    const lastJson = _lastJson;
+    var _cacheDatas: UserDatas[];
+    try {
+        _cacheDatas = JSON.parse(lastJson);
+    } catch (err) {
+        _cacheDatas = [];
+    }
+    const cacheDatas = _cacheDatas;
     const users = await getAllNames();
     var usersData: UserDatas[] = [];
 
