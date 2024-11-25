@@ -184,4 +184,8 @@ $bgColor: #2d2d2d;
             height: #{$i}px !important;
         }
     }
+
+    &.hidden {
+        display: none;
+    }
 }

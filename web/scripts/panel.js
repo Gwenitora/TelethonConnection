@@ -4,6 +4,7 @@ const uname = document.getElementById("uname-id-link-field");
 const previewBox = document.getElementsByClassName("preview")[0];
 const preview = document.getElementById("preview");
 const outputLink = document.getElementById("outputLink");
+const MyCollect = document.getElementById("myCollect");
 
 const CagnType = {
   Perso: document.getElementById("CagnPerso"),
@@ -35,6 +36,7 @@ const heightAsset = document.getElementById("heightAsset");
 const heightAssetPreview = document.getElementById("heightAssetPreview");
 
 var pseudo = undefined;
+var collectLink = undefined;
 var previewLink = "/widget";
 
 function Copy(copyText) {
@@ -96,10 +98,14 @@ socket.on("personal", (datas) => {
     uname.title =
       "Utilisateur non trouver dans la liste des streamers Quest Education pour le Téléthon\nÀ la place, voici la cagnotte quest\n\nSi vous pensez que c'est une erreur, veuillez contacter un administrateur.";
     pseudo = undefined;
+    collectLink = undefined;
+    MyCollect.className = "hidden";
   } else {
     uname.className = "";
     uname.title = `Voici le lien de votre cagnotte:\n- ${datas.link}`;
     pseudo = datas.name;
+    collectLink = datas.link;
+    MyCollect.className = "";
   }
 });
 socket.emit("getPersonal", uname.value);
@@ -125,6 +131,11 @@ const copyLink = () => {
 
 const newTab = () => {
   window.open(previewLink, "_blank");
+};
+
+const myCollect = () => {
+  if (collectLink === undefined) return;
+  window.open(collectLink, "_blank");
 };
 
 const updateBgTransparency = () => {
