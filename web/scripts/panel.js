@@ -65,7 +65,7 @@ const generateLink = () => {
   if (txtColor.value !== "" && txtColor.value !== "#000000") {
     options.push(`txtColor=${txtColor.value.replace("#", "")}`);
   }
-  var transp = parseInt(bgTransparency.value).toString(16);
+  var transp = Math.round(parseFloat(bgTransparency.value) / 100 * 255).toString(16);
   if (transp.length <= 1) transp = "0" + transp;
   if (
     bgColor.value + transp !== "0" &&

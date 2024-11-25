@@ -4,10 +4,14 @@ import express, { Request, Response } from "express";
 import { join } from 'path';
 import { Server } from "socket.io";
 import getAllDatas, { getBiggestDonator, getGlobal, getGlobalObjectif, getNational, getUserDatas } from "./readData";
+import GetDatasFromSheet from './gsheet';
+
+export const DebugMode = true;
+const timeBetweenGoogleRequest = 1.5; // in seconds
 
 // NOTE: =================== Initialisations =================== //
 const domain = 'http://localhost';
-const port = 3000;
+export const port = 3000;
 const app = express();
 const server = createServer(app);
 const io = new Server(server);
@@ -121,3 +125,7 @@ server.listen(port, () => {
     console.log(`server running at ${domain}:${port}`);
     Start();
 });
+
+// NOTE: =================== API Google =================== //
+GetDatasFromSheet();
+setInterval(GetDatasFromSheet, timeBetweenGoogleRequest * 1000);
