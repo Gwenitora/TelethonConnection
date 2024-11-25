@@ -6,7 +6,7 @@ import { Server } from "socket.io";
 import getAllDatas, { getBiggestDonator, getGlobal, getGlobalObjectif, getNational, getUserDatas } from "./readData";
 import GetDatasFromSheet from './gsheet';
 
-export const DebugMode = false;
+export const DebugMode = true;
 const timeBetweenGoogleRequest = 1.5; // in seconds
 
 // NOTE: =================== Initialisations =================== //

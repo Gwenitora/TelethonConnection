@@ -19,6 +19,10 @@ $errorColor: #ff6b6b;
             justify-content: center;
             align-items: center;
             color: #ffffff;
+
+            > div {
+                min-width: 10000000000px;
+            }
         }
     }
 }

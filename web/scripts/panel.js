@@ -3,6 +3,7 @@ const socket = io();
 const uname = document.getElementById("uname-id-link-field");
 const previewBox = document.getElementsByClassName("preview")[0];
 const preview = document.getElementById("preview");
+const innerPreview = document.getElementById("innerPreview");
 const outputLink = document.getElementById("outputLink");
 const MyCollect = document.getElementById("myCollect");
 
@@ -15,7 +16,12 @@ const format = {
   Default: document.getElementById("recolted"),
   Complete: document.getElementById("recoltedObjectif"),
   Objectif: document.getElementById("objectif"),
+  BiggestDonator: document.getElementById("biggestDonator"),
+  LastestDonator: document.getElementById("latestDonantor"),
 };
+
+const nbLatestDonators = document.getElementById("nbLatestDonators");
+const nbLatestDonatorsPreview = document.getElementById("nbLatestDonatorsPreview");
 
 const txtColor = document.getElementById("txtColor");
 const bgColor = document.getElementById("bgColor");
@@ -38,6 +44,19 @@ const heightAssetPreview = document.getElementById("heightAssetPreview");
 var pseudo = undefined;
 var collectLink = undefined;
 var previewLink = "/widget";
+
+function solveWidthBug() {
+  if (previewBox.clientWidth > preview.clientWidth) {
+    innerPreview.style.width = "100%";
+  } else {
+    innerPreview.style.width = "auto";
+  }
+  if (previewBox.clientHeight > preview.clientHeight) {
+    innerPreview.style.height = "100%";
+  } else {
+    innerPreview.style.height = "auto";
+  }
+}
 
 function Copy(copyText) {
   navigator.clipboard.writeText(copyText);
@@ -120,9 +139,8 @@ const updatePseudo = () => {
 };
 
 setInterval(() => {
+  solveWidthBug();
   generateLink();
-  widthAsset.max = previewBox.clientWidth;
-  heightAsset.max = previewBox.clientHeight;
 }, 50);
 
 const copyLink = () => {
@@ -137,6 +155,10 @@ const myCollect = () => {
   if (collectLink === undefined) return;
   window.open(collectLink, "_blank");
 };
+
+const updateNbLatestDonators = () => {
+  nbLatestDonatorsPreview.innerText = nbLatestDonators.value;
+}
 
 const updateBgTransparency = () => {
   bgTransparencyPreview.innerText = bgTransparency.value;
@@ -156,7 +178,6 @@ updateFontSize();
 const updateWidthAsset = () => {
   widthAssetPreview.innerText = widthAsset.value;
   preview.width = widthAsset.value;
-  console.log(preview.classList);
   preview.classList.remove(
     preview.classList.value.split(" ").find((c) => c.startsWith("width-"))
   );
@@ -167,7 +188,6 @@ updateWidthAsset();
 const updateHeightAsset = () => {
   heightAssetPreview.innerText = heightAsset.value;
   preview.height = heightAsset.value;
-  console.log(preview.classList);
   preview.classList.remove(
     preview.classList.value.split(" ").find((c) => c.startsWith("height-"))
   );

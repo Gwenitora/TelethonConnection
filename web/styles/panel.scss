@@ -3,8 +3,6 @@ $errorColor: #ff6b6b;
 $bgColor: #2d2d2d;
 
 * {
-    font-family: Arial, sans-serif;
-
     body {
         background-color: $bgColor;
         color: #ffffff;
@@ -26,7 +24,8 @@ $bgColor: #2d2d2d;
             }
         }
 
-        input[type="text"] {
+        input[type="text"],
+        input[type="number"] {
             appearance: none;
             border: none;
             outline: none;
@@ -63,19 +62,19 @@ $bgColor: #2d2d2d;
             color: $warlockColor;
             width: 1.15em;
             height: 1.15em;
-            border: .15em solid currentColor;
+            border: 0.15em solid currentColor;
             border-radius: 50%;
             place-content: center;
             margin-right: 5px;
-            transition: .25s;
+            transition: 0.25s;
             &:checked {
                 transform: scale(1);
                 background-color: lighten($warlockColor, 15%);
             }
         }
 
-        input[type=color] { 
-            padding: .3em;
+        input[type="color"] {
+            padding: 0.3em;
             border: none;
             width: 2em;
             height: 2em;
@@ -91,7 +90,7 @@ $bgColor: #2d2d2d;
             }
         }
 
-        input[type=range] {
+        input[type="range"] {
             appearance: none;
             background: transparent;
             width: 40vw;
@@ -101,21 +100,34 @@ $bgColor: #2d2d2d;
                 height: 1.5em;
                 border-radius: 50%;
                 background: $bgColor;
-                border: .2em solid $warlockColor;
+                border: 0.2em solid $warlockColor;
                 margin-top: -3px;
             }
             @mixin slider-track {
                 background: $warlockColor;
                 width: 100%;
                 border-radius: 1vmin;
-                height: .5em;
+                height: 0.5em;
             }
-            &::-webkit-slider-thumb { margin-top: -8px; @include slider-thumb }
-            &::-moz-range-thumb { @include slider-thumb }
-            &::-ms-thumb { @include slider-thumb }
-            &::-webkit-slider-runnable-track { @include slider-track }
-            &::-moz-range-track { @include slider-track }
-            &::-ms-track { @include slider-track }
+            &::-webkit-slider-thumb {
+                margin-top: -8px;
+                @include slider-thumb;
+            }
+            &::-moz-range-thumb {
+                @include slider-thumb;
+            }
+            &::-ms-thumb {
+                @include slider-thumb;
+            }
+            &::-webkit-slider-runnable-track {
+                @include slider-track;
+            }
+            &::-moz-range-track {
+                @include slider-track;
+            }
+            &::-ms-track {
+                @include slider-track;
+            }
         }
 
         div.horParts {
@@ -131,13 +143,20 @@ $bgColor: #2d2d2d;
 
             div.preview {
                 overflow: auto;
-                width: 45vw;
                 display: flex;
-                justify-content: center;
-                align-items: center;
-                iframe#preview {
-                    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('/transparentTexture.jpg');
-                    background-repeat: repeat;
+                justify-content: start;
+                align-items: start;
+                div#innerPreview {
+                    position: relative;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    iframe#preview {
+                        position: relative;
+                        background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+                            url("/transparentTexture.jpg");
+                        background-repeat: repeat;
+                    }
                 }
             }
 

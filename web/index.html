@@ -12,14 +12,19 @@
     <h1>Cagnottes - Assets Panel</h1>
     <div class="horParts">
         <div class="preview">
-            <iframe class="width-1 height-1" id="preview" src="/widget/WarlockProd" frameborder="0" title="Preview"></iframe>
+            <div id="innerPreview">
+                <iframe class="width-1 height-1" id="preview" src="/widget/WarlockProd" frameborder="0" title="Preview"></iframe>
+            </div>
         </div>
         <form>
             <input id="uname-id-link-field" class="error" type="text" placeholder="Entrer votre page de collecte ici" onfocus="updatePseudo()" onFocusout="updatePseudo()"><br>
 
-            <label><input type="radio" name="cagnotteType" title="Cagnotte Perso"    id="CagnPerso" checked>Cagnotte Perso   </label><br>
-            <label><input type="radio" name="cagnotteType" title="Cagnotte Quest"    id="CagnQuest"        >Cagnotte Quest   </label><br>
-            <label><input type="radio" name="cagnotteType" title="Cagnotte National" id="CagnNatio"        >Cagnotte National</label><br><br>
+            <label><input type="radio" name="cagnotteType" title="Cagnotte Perso"      id="CagnPerso" checked >Cagnotte Perso      </label><br>
+            <label><input type="radio" name="cagnotteType" title="Cagnotte Quest"      id="CagnQuest"         >Cagnotte Quest      </label><br>
+            <label><input type="radio" name="cagnotteType" title="Cagnotte National"   id="CagnNatio"         >Cagnotte National   </label><br>
+            <label><input type="radio" name="cagnotteType" title="Plus grand donateur" id="biggestDonantor"   >Plus grand donateur </label><br>
+            <label><input type="radio" name="cagnotteType" title="Derniers donateurs"  id="latestDonantor"    >Derniers donateurs  </label><br>
+            <label><br>Nombre de derniers donateurs: <span id="nbLatestDonatorsPreview"></span><input type="range" name="nbLatestDonators" title="Nombres de derniers donateurs, dans le cas ou vous cocher 'Derniers donateurs' ci dessus" id="nbLatestDonators" value="3" min="1" max="20" step="1" oninput="updateNbLatestDonators()"></label><br><br>
 
             <label><input type="radio" name="format" title="Récolté"          id="recolted" checked>Récolté</label><br>
             <label><input type="radio" name="format" title="Récolté / Objectif" id="recoltedObjectif">Récolté / Objectif</label><br>
