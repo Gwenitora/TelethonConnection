@@ -59,12 +59,14 @@ const controlPanel = (req: Request<{
 app.get("/d/:file", (req, res) => {
     var f = req.params.file;
     if (!f.endsWith('.json')) f += '.json';
+    debug.logWarn(`Accès au fichier de données : ${f}\n                                   - IP : ${req.ip}`);
     res.sendFile(join(__dirname, `../datas/${f}`));
 });
 app.get("/l/:file", (req, res) => {
     var f = req.params.file;
     if (!f.endsWith('.log')) f += '.log';
     res.sendFile(join(__dirname, `../datas/logs/${f}`));
+    debug.logWarn(`Accès au fichier de log : ${f}\n                                   - IP : ${req.ip}`);
 });
 app.get("/widget/:name", (req, res) => {
     var f = 'widget/index.html';
