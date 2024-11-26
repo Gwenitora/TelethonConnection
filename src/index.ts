@@ -146,6 +146,7 @@ const Start = async () => {
         io.emit('global', global);
         io.emit('globalObjectif', getGlobalObjectif());
         io.emit('national', getNational());
+        io.emit('suggestions', await getUserSuggestion());
     }
 };
 

@@ -180,7 +180,9 @@ const generateLink = () => {
 };
 
 socket.on("suggestions", (datas) => {
-  namesDatas.innerHTML = datas.map((d) => `<option>${d}</option>`).join("");
+  const d = datas.map((d) => `<option>${d}</option>`).join("");
+  if (d === "" || d === undefined || d === null || d === namesDatas.innerHTML) return;
+  namesDatas.innerHTML = d;
 });
 socket.on("personal", (datas) => {
   if (datas === undefined || datas === null) {
