@@ -14,6 +14,7 @@ var biggestDonatorGlobal = "";
 const cagnotte = document.getElementById("Cagnotte");
 const container = document.getElementById("Container");
 const secondaryColor = document.getElementsByClassName("secondary");
+const manualSeperation = document.getElementsByClassName("manualSeperation");
 
 const isGlobal = () => getCurrentURL().split("/").length <= 4;
 const isNational = () => params.get("national") !== null && isGlobal();
@@ -117,7 +118,7 @@ socket.on("personal", (data) => {
   for (let i = 0; i < data.donations.length && i < getLatestDonatorNb(); i++) {
     _lastestDonatorPerso += `<span class="secondary">${data.donations[i].name}: </span>${data.donations[
       i
-    ].amount.toLocaleString()} €`;
+    ].amount.toLocaleString()} €<span class="manualSeperation"></span>`;
   }
   lastestDonatorPerso = _lastestDonatorPerso;
 });
@@ -149,6 +150,9 @@ const interval = () => {
         .replaceAll("$B", biggestDonatorGlobal)
     : "";
 
+  for (let i = 0; i < manualSeperation.length; i++) {
+    manualSeperation[i].style.width = getSpacingRepeat() + "px";
+  }
   if (isRepeat()) {
     createPDuplicates("Cagnotte", 10, getSpacingRepeat());
   }

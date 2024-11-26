@@ -17,7 +17,8 @@
             </div>
         </div>
         <form>
-            <input id="uname-id-link-field" class="error" type="text" placeholder="Entrer votre page de collecte ici" onfocus="updatePseudo()" onFocusout="updatePseudo()"><br>
+            <input list="namesDatas" id="uname-id-link-field" class="error" type="text" placeholder="Entrer votre page de collecte ici" onfocus="updatePseudo()" onFocusout="updatePseudo()">
+            <datalist id="namesDatas" lis></datalist><br>
 
             <label><input type="radio" name="cagnotteType" title="Cagnotte Perso"            id="CagnPerso" checked>Cagnotte Perso            </label><br>
             <label><input type="radio" name="cagnotteType" title="Cagnotte Quest"            id="CagnQuest"        >Cagnotte Quest            </label><br>

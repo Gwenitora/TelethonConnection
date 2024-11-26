@@ -3,7 +3,7 @@ import { createServer } from "http";
 import express, { Request, Response } from "express";
 import { join } from 'path';
 import { Server } from "socket.io";
-import getAllDatas, { getBiggestDonator, getGlobal, getGlobalObjectif, getNational, getUserDatas } from "./readData";
+import getAllDatas, { getBiggestDonator, getGlobal, getGlobalObjectif, getNational, getUserDatas, getUserSuggestion } from "./readData";
 import GetDatasFromSheet from './gsheet';
 import { debug, LoggerFile } from '@gscript/gtools';
 
@@ -107,6 +107,16 @@ io.on('connection', (socket) => {
     socket.on('getPersonal', (userInfo: string) => {
         getUserDatas(userInfo).then((data) => {
             socket.emit('personal', data);
+            if (data === null || data === undefined) {
+                getUserSuggestion().then((data2) => {
+                    socket.emit('suggestions', data2);
+                });
+            }
+        });
+    });
+    socket.on('getSuggestions', () => {
+        getUserSuggestion().then((data) => {
+            socket.emit('suggestions', data);
         });
     });
 });

@@ -1,6 +1,7 @@
 const socket = io();
 
 const uname = document.getElementById("uname-id-link-field");
+const namesDatas = document.getElementById("namesDatas");
 const previewBox = document.getElementsByClassName("preview")[0];
 const preview = document.getElementById("preview");
 const innerPreview = document.getElementById("innerPreview");
@@ -20,11 +21,13 @@ const CagnType = {
 const format = {
   Default: document.getElementById("recolted"),
   Complete: document.getElementById("recoltedObjectif"),
-  Objectif: document.getElementById("objectif")
+  Objectif: document.getElementById("objectif"),
 };
 
 const nbLatestDonators = document.getElementById("nbLatestDonators");
-const nbLatestDonatorsPreview = document.getElementById("nbLatestDonatorsPreview");
+const nbLatestDonatorsPreview = document.getElementById(
+  "nbLatestDonatorsPreview"
+);
 
 const txtColor = document.getElementById("txtColor");
 const txtColor2 = document.getElementById("txtColor2");
@@ -81,11 +84,21 @@ function Copy(copyText) {
 
 const generateLink = () => {
   var options = [];
-  if (pseudo === undefined || !(CagnType.Perso.checked || CagnType.BiggestDonatorPerso.checked || CagnType.LastestDonatorPerso.checked)) {
+  if (
+    pseudo === undefined ||
+    !(
+      CagnType.Perso.checked ||
+      CagnType.BiggestDonatorPerso.checked ||
+      CagnType.LastestDonatorPerso.checked
+    )
+  ) {
     previewLink = "/widget";
     if (CagnType.National.checked) {
       options.push("national");
-    } else if (CagnType.BiggestDonatorGlobal.checked || CagnType.BiggestDonatorPerso.checked) {
+    } else if (
+      CagnType.BiggestDonatorGlobal.checked ||
+      CagnType.BiggestDonatorPerso.checked
+    ) {
       options.push("biggestDonator");
       if (txtColor2.value !== "#777777" && txtColor2.value !== "") {
         options.push(`txtColor2=${txtColor2.value.replace("#", "")}`);
@@ -105,16 +118,21 @@ const generateLink = () => {
       }
     }
   }
-  var transp = Math.round(parseFloat(bgTransparency.value) / 100 * 255).toString(16);
+  var transp = Math.round(
+    (parseFloat(bgTransparency.value) / 100) * 255
+  ).toString(16);
   if (repeatation.checked) {
-    transp = '00';
+    transp = "00";
     options.push("repeat");
-    if (spacing.value !== "50") {
-      options.push(`spacing=${spacing.value}`);
-    }
     if (moving.value !== "0") {
       options.push(`moving=${moving.value}`);
     }
+  }
+  if (
+    spacing.value !== "50" &&
+    (repeatation.checked || CagnType.LastestDonatorPerso.checked)
+  ) {
+    options.push(`spacing=${spacing.value}`);
   }
   if (transp.length <= 1) transp = "0" + transp;
   if (
@@ -124,9 +142,15 @@ const generateLink = () => {
   ) {
     options.push(`bgColor=${(bgColor.value + transp).replace("#", "")}`);
   }
-  if (format.Complete.checked && (CagnType.Perso.checked || CagnType.Global.checked)) {
+  if (
+    format.Complete.checked &&
+    (CagnType.Perso.checked || CagnType.Global.checked)
+  ) {
     options.push("complete");
-  } else if (format.Objectif.checked && (CagnType.Perso.checked || CagnType.Global.checked)) {
+  } else if (
+    format.Objectif.checked &&
+    (CagnType.Perso.checked || CagnType.Global.checked)
+  ) {
     options.push("objectif");
   }
   if (txtColor.value !== "" && txtColor.value !== "#000000") {
@@ -138,7 +162,11 @@ const generateLink = () => {
   if (fontSize.value !== "25") {
     options.push(`fontS=${fontSize.value}`);
   }
-  if (nbLatestDonators.value !== "3" && CagnType.LastestDonatorPerso.checked && pseudo !== undefined) {
+  if (
+    nbLatestDonators.value !== "3" &&
+    CagnType.LastestDonatorPerso.checked &&
+    pseudo !== undefined
+  ) {
     options.push(`latestDonatorNb=${nbLatestDonators.value}`);
   }
 
@@ -151,6 +179,9 @@ const generateLink = () => {
   outputLink.innerText = previewLink;
 };
 
+socket.on("suggestions", (datas) => {
+  namesDatas.innerHTML = datas.map((d) => `<option>${d}</option>`).join("");
+});
 socket.on("personal", (datas) => {
   if (datas === undefined || datas === null) {
     uname.className = "error";

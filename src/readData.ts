@@ -60,7 +60,8 @@ const listOfPageTypes = [
     "familles",
     "collecte-hommages",
     "collecte-solidaire",
-    "tfe"
+    "tfe",
+    "MFC"
 ]
 const page = "https://mapage.telethon.fr/#/"
 const moneyPage = "https://mapage.telethon.fr/ajax/goal/peer?templatePeerId=5269&templateCollectorId="
@@ -129,6 +130,7 @@ const CalculateBiggestDonator = (donations: {
     var GroupedDonations: BiggestDonator[] = []
 
     for (let i = 0; i < donations.length; i++) {
+        if (donations[i].name === "Anonyme") continue;
         const index = GroupedDonations.findIndex((don) => don.name === donations[i].name);
         var thatDonation = json.clone(donations[i]);
         delete (thatDonation as any).name;
@@ -145,6 +147,7 @@ const CalculateBiggestDonator = (donations: {
         }
     }
 
+    GroupedDonations.sort((a, b) => b.dons.length - a.dons.length);
     GroupedDonations.sort((a, b) => b.amount - a.amount);
 
     return GroupedDonations[0];
@@ -308,7 +311,15 @@ export default getAllDatas;
 export const getUserDatas = async (userInfo: string): Promise<UserDatas | undefined> => {
     const datas = await fs.readFile(path.resolve(__dirname, '../datas/datas.json'), 'utf-8');
     const users: UserDatas[] = JSON.parse(datas);
-    const finaleDatas = users.find((user: UserDatas) => user.name === userInfo || user.id.toString() === userInfo || user.link === userInfo);
+    userInfo = userInfo.toLowerCase();
+    const finaleDatas = users.find((user: UserDatas) => user.name.toLowerCase() === userInfo || user.id.toString().toLowerCase() === userInfo || user.link.toLowerCase() === userInfo);
+    return finaleDatas;
+}
+
+export const getUserSuggestion = async (): Promise<string[]> => {
+    const datas = await fs.readFile(path.resolve(__dirname, '../datas/datas.json'), 'utf-8');
+    const users: UserDatas[] = JSON.parse(datas);
+    const finaleDatas = users.map((user) => user.name);
     return finaleDatas;
 }
 
