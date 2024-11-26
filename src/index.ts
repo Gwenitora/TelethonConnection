@@ -7,10 +7,10 @@ import getAllDatas, { getBiggestDonator, getGlobal, getGlobalObjectif, getNation
 import GetDatasFromSheet from './gsheet';
 import { debug, LoggerFile } from '@gscript/gtools';
 
-export const DebugMode = true;
+
+// NOTE: =================== Setup =================== //
+export const DebugMode = false;
 const timeBetweenGoogleRequest = 30; // in seconds
-debug.cls();
-LoggerFile.start('datas/logs');
 
 // NOTE: =================== Initialisations =================== //
 const domain = 'http://localhost';
@@ -18,6 +18,20 @@ export const port = 3000;
 const app = express();
 const server = createServer(app);
 const io = new Server(server);
+if (!fs.existsSync(join(__dirname, '../datas'))) {
+    fs.mkdirSync(join(__dirname, '../datas'))
+}
+if (!fs.existsSync(join(__dirname, '../datas/logs'))) {
+    fs.mkdirSync(join(__dirname, '../datas/logs'))
+}
+if (!fs.existsSync(join(__dirname, '../datas/datas.json'))){
+    fs.writeFileSync(join(__dirname, '../datas/datas.json'), '[]')
+}
+if (!fs.existsSync(join(__dirname, '../datas/names.json'))){
+    fs.writeFileSync(join(__dirname, '../datas/names.json'), '[]')
+}
+debug.cls();
+LoggerFile.start('datas/logs');
 
 // NOTE: =================== Envoie des pages web =================== //
 const controlPanel = (req: Request<{
