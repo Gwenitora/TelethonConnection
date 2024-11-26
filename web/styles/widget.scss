@@ -21,8 +21,20 @@ $errorColor: #ff6b6b;
             color: #ffffff;
 
             > div {
-                min-width: 10000000000px;
+                > p {
+                    width: fit-content;
+                }
             }
+        }
+
+        p {
+            white-space: nowrap;
+        }
+
+        span.mini {
+            display: flow;
+            margin-top: -6px !important;
+            font-size: 0.6em;
         }
     }
 }

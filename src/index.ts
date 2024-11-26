@@ -7,7 +7,7 @@ import getAllDatas, { getBiggestDonator, getGlobal, getGlobalObjectif, getNation
 import GetDatasFromSheet from './gsheet';
 
 export const DebugMode = true;
-const timeBetweenGoogleRequest = 1.5; // in seconds
+const timeBetweenGoogleRequest = 30; // in seconds
 
 // NOTE: =================== Initialisations =================== //
 const domain = 'http://localhost';
@@ -113,10 +113,10 @@ io.on('connection', (socket) => {
 const Start = async () => {
     while (true) {
         const global = await getAllDatas();
-        io.emit('-biggestDonator', getBiggestDonator());
-        io.emit('-global', global);
-        io.emit('-globalObjectif', getGlobalObjectif());
-        io.emit('-national', getNational());
+        io.emit('biggestDonator', getBiggestDonator());
+        io.emit('global', global);
+        io.emit('globalObjectif', getGlobalObjectif());
+        io.emit('national', getNational());
     }
 };
 

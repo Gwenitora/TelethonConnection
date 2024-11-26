@@ -11,13 +11,16 @@ const CagnType = {
   Perso: document.getElementById("CagnPerso"),
   Global: document.getElementById("CagnQuest"),
   National: document.getElementById("CagnNatio"),
+
+  BiggestDonatorPerso: document.getElementById("biggestDonatorP"),
+  LastestDonatorPerso: document.getElementById("latestDonantorP"),
+
+  BiggestDonatorGlobal: document.getElementById("biggestDonatorQ"),
 };
 const format = {
   Default: document.getElementById("recolted"),
   Complete: document.getElementById("recoltedObjectif"),
-  Objectif: document.getElementById("objectif"),
-  BiggestDonator: document.getElementById("biggestDonator"),
-  LastestDonator: document.getElementById("latestDonantor"),
+  Objectif: document.getElementById("objectif")
 };
 
 const nbLatestDonators = document.getElementById("nbLatestDonators");
@@ -40,6 +43,10 @@ const widthAssetPreview = document.getElementById("widthAssetPreview");
 
 const heightAsset = document.getElementById("heightAsset");
 const heightAssetPreview = document.getElementById("heightAssetPreview");
+
+const repeatation = document.getElementById("repeatation");
+const spacing = document.getElementById("spacing");
+const spacingPreview = document.getElementById("spacingPreview");
 
 var pseudo = undefined;
 var collectLink = undefined;
@@ -70,17 +77,30 @@ function Copy(copyText) {
 
 const generateLink = () => {
   var options = [];
-  if (pseudo === undefined || !CagnType.Perso.checked) {
+  if (pseudo === undefined || !(CagnType.Perso.checked || CagnType.BiggestDonatorPerso.checked || CagnType.LastestDonatorPerso.checked)) {
     previewLink = "/widget";
     if (CagnType.National.checked) {
       options.push("national");
+    } else if (CagnType.BiggestDonatorGlobal.checked || CagnType.BiggestDonatorPerso.checked) {
+      options.push("biggestDonator");
     }
   } else {
     previewLink = `/widget/${pseudo}`;
+    if (CagnType.BiggestDonatorPerso.checked) {
+      options.push("biggestDonatorPerso");
+    } else if (CagnType.LastestDonatorPerso.checked) {
+      options.push("latestDonatorPerso");
+    }
   }
-  if (format.Complete.checked) {
+  if (repeatation.checked) {
+    options.push("repeat");
+    if (spacing.value !== "50") {
+      options.push(`spacing=${spacing.value}`);
+    }
+  }
+  if (format.Complete.checked && (CagnType.Perso.checked || CagnType.Global.checked)) {
     options.push("complete");
-  } else if (format.Objectif.checked) {
+  } else if (format.Objectif.checked && (CagnType.Perso.checked || CagnType.Global.checked)) {
     options.push("objectif");
   }
   if (txtColor.value !== "" && txtColor.value !== "#000000") {
@@ -95,11 +115,14 @@ const generateLink = () => {
   ) {
     options.push(`bgColor=${(bgColor.value + transp).replace("#", "")}`);
   }
-  if (borderRadius.value !== "100") {
+  if (borderRadius.value !== "100" && transp !== "00") {
     options.push(`borderR=${borderRadius.value}`);
   }
-  if (fontSize.value !== "40") {
+  if (fontSize.value !== "25") {
     options.push(`fontS=${fontSize.value}`);
+  }
+  if (nbLatestDonators.value !== "3" && CagnType.LastestDonatorPerso.checked && pseudo !== undefined) {
+    options.push(`latestDonatorNb=${nbLatestDonators.value}`);
   }
 
   previewLink =
@@ -158,7 +181,8 @@ const myCollect = () => {
 
 const updateNbLatestDonators = () => {
   nbLatestDonatorsPreview.innerText = nbLatestDonators.value;
-}
+};
+updateNbLatestDonators();
 
 const updateBgTransparency = () => {
   bgTransparencyPreview.innerText = bgTransparency.value;
@@ -194,3 +218,8 @@ const updateHeightAsset = () => {
   preview.classList.add(`height-${heightAsset.value}`);
 };
 updateHeightAsset();
+
+const updateSpacing = () => {
+  spacingPreview.innerText = spacing.value;
+};
+updateSpacing();
