@@ -5,7 +5,7 @@ import { join } from 'path';
 import { Server } from "socket.io";
 import getAllDatas, { getBiggestDonator, getGlobal, getGlobalObjectif, getNational, getUserDatas, getUserSuggestion } from "./readData";
 import GetDatasFromSheet from './gsheet';
-import { debug, LoggerFile } from '@gscript/gtools';
+import { debug, env, LoggerFile } from '@gscript/gtools';
 
 
 // NOTE: =================== Setup =================== //
@@ -13,7 +13,7 @@ export const DebugMode = false;
 const timeBetweenGoogleRequest = 30; // in seconds
 
 // NOTE: =================== Initialisations =================== //
-const domain = 'http://localhost';
+const domain = env.DOMAIN!;
 export const port = 3000;
 const app = express();
 const server = createServer(app);
