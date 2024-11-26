@@ -1,4 +1,4 @@
-import { env } from "@gscript/gtools";
+import { debug, env } from "@gscript/gtools";
 import { DebugMode, port } from '.';
 import { google } from "googleapis";
 import fs from 'fs';
@@ -42,7 +42,7 @@ const GetDatasFromSheet = async () => {
         const filePath = path.resolve(__dirname, '../datas/names.json');
         fs.writeFileSync(filePath, JSON.stringify(datas, null, DebugMode ? 4 : 0));
     } catch (error) {
-        console.error('Erreur lors de la récupération des données :', error);
+        debug.logErr('Erreur lors de la récupération des données :', error);
         throw error;
     }
 };

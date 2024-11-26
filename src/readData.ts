@@ -1,6 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
-import { json } from '@gscript/gtools';
+import { debug, json } from '@gscript/gtools';
 import { DebugMode } from '.';
 
 // NOTE: =================== Initialisations =================== //
@@ -72,7 +72,7 @@ const nationalPage = "https://widgets.afm-telethon.fr/widget/compteur-national";
 const getNationalSum = async (): Promise<number> => {
     const response = await fetch(nationalPage);
     if (response.status !== 200) {
-        console.error(`HTTP error for national datas:\n  ${response.status}`);
+        debug.logErr(`HTTP error for national datas:\n  ${response.status}`);
         return national;
     }
     const text = (await response.text()).replaceAll("\n", "").replaceAll("\t", "").replaceAll("\r", "").replaceAll(" ", "");
@@ -83,7 +83,7 @@ const getNationalSum = async (): Promise<number> => {
 const getId = async (user: string, type: string): Promise<number> => {
     const response = await fetch(page.replace("#", type) + user);
     if (response.status !== 200) {
-        console.error(`HTTP error for user ${user}:\n  ${response.status}`);
+        debug.logErr(`HTTP error for user ${user}:\n  ${response.status}`);
         return -1;
     }
     var text = (await response.text()).replaceAll("\n", "").replaceAll("\t", "").replaceAll("\r", "").replaceAll(" ", "");
@@ -100,14 +100,14 @@ const getType = async (user: string): Promise<string> => {
         }
         return listOfPageTypes[i];
     }
-    console.error(`404 - not found user: "${user}"`);
+    debug.logErr(`404 - not found user: "${user}"`);
     return listOfPageTypes[0];
 }
 
 const getMoney = async (user: string): Promise<{ [key in 'money' | 'objectif']: number }> => {
     const response = await fetch(moneyPage + user);
     if (response.status !== 200) {
-        console.error(`HTTP error for user ${user}:\n  ${response.status}`);
+        debug.logErr(`HTTP error for user ${user}:\n  ${response.status}`);
         return { money: -1, objectif: -1 };
     }
     const text = (await response.text()).replaceAll("\n", "").replaceAll("\t", "").replaceAll("\r", "").replaceAll(" ", "");
@@ -153,7 +153,7 @@ const CalculateBiggestDonator = (donations: {
 const getDonations = async (user: string): Promise<UserDatas["donations"]> => {
     const response = await fetch(donorsPage.replace("#", user));
     if (response.status !== 200) {
-        console.error(`HTTP error for user ${user}:\n  ${response.status}`);
+        debug.logErr(`HTTP error for user ${user}:\n  ${response.status}`);
         return [];
     }
     const text = (await response.text()).replaceAll("\n", "").replaceAll("\t", "").replaceAll("\r", "");
@@ -240,7 +240,7 @@ const getAllDatas = async (): Promise<number> => {
                     donations: donations
                 });
                 continue;
-            } catch (err) { console.error(err); }
+            } catch (err) { debug.logErr(err); }
         }
 
         // À l'inverse, si les données ne sont pas enregistrées
@@ -261,7 +261,7 @@ const getAllDatas = async (): Promise<number> => {
                 donations: donations
             });
 
-        } catch (err) { console.error(err); }
+        } catch (err) { debug.logErr(err); }
 
     }
 

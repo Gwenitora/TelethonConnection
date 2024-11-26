@@ -27,6 +27,7 @@ const nbLatestDonators = document.getElementById("nbLatestDonators");
 const nbLatestDonatorsPreview = document.getElementById("nbLatestDonatorsPreview");
 
 const txtColor = document.getElementById("txtColor");
+const txtColor2 = document.getElementById("txtColor2");
 const bgColor = document.getElementById("bgColor");
 
 const bgTransparency = document.getElementById("bgTransparency");
@@ -83,13 +84,22 @@ const generateLink = () => {
       options.push("national");
     } else if (CagnType.BiggestDonatorGlobal.checked || CagnType.BiggestDonatorPerso.checked) {
       options.push("biggestDonator");
+      if (txtColor2.value !== "#777777" && txtColor2.value !== "") {
+        options.push(`txtColor2=${txtColor2.value.replace("#", "")}`);
+      }
     }
   } else {
     previewLink = `/widget/${pseudo}`;
     if (CagnType.BiggestDonatorPerso.checked) {
       options.push("biggestDonatorPerso");
+      if (txtColor2.value !== "#777777" && txtColor2.value !== "") {
+        options.push(`txtColor2=${txtColor2.value.replace("#", "")}`);
+      }
     } else if (CagnType.LastestDonatorPerso.checked) {
       options.push("latestDonatorPerso");
+      if (txtColor2.value !== "#777777" && txtColor2.value !== "") {
+        options.push(`txtColor2=${txtColor2.value.replace("#", "")}`);
+      }
     }
   }
   if (repeatation.checked) {

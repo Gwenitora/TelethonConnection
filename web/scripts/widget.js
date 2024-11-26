@@ -13,6 +13,7 @@ var biggestDonatorGlobal = "";
 
 const cagnotte = document.getElementById("Cagnotte");
 const container = document.getElementById("Container");
+const secondaryColor = document.getElementsByClassName("secondary");
 
 const isGlobal = () => getCurrentURL().split("/").length <= 4;
 const isNational = () => params.get("national") !== null && isGlobal();
@@ -25,6 +26,7 @@ const isBiggestDonatorGlobal = () =>
   params.get("biggestDonator") !== null && isGlobal();
 const getPseudo = () => getCurrentURL().split("/")[4].split("?")[0];
 const getTxtColor = () => "#" + (params.get("txtColor") || "000000");
+const getTxtColor2 = () => "#" + (params.get("txtColor2") || "777777");
 const getBgColor = () => "#" + (params.get("bgColor") || "ffffff00");
 const getBorderRadius = () => params.get("borderR") || 100;
 const getFontSize = () => params.get("fontS") || 25;
@@ -60,9 +62,9 @@ const getFormat = () => {
 };
 
 socket.on("biggestDonator", (data) => {
-  biggestDonatorGlobal = `${data.name}: ${
+  biggestDonatorGlobal = `<span class="secondary">${data.name}: </span>${
     data.amount
-  } €<br><span class="mini">(${data.dons.length} don${
+  } €<br><span class="mini secondary">(${data.dons.length} don${
     data.dons.length > 1 ? "s" : ""
   } pour ${
     data.dons.map((d) => d.for).filter((e, i, a) => a.indexOf(e) === i).length
@@ -71,7 +73,7 @@ socket.on("biggestDonator", (data) => {
     1
       ? "s"
       : ""
-  })</p>`;
+  })</span></p>`;
 });
 
 socket.on("global", (data) => {
@@ -105,14 +107,14 @@ socket.on("personal", (data) => {
   }
   recolted = data.money;
   objectif = data.objectif;
-  biggestDonatorPerso = `${
+  biggestDonatorPerso = `<span class="secondary">${
     data.biggestDonator.name
-  }: ${data.biggestDonator.amount.toLocaleString()} €<br><span class="mini">(${
+  }: </span>${data.biggestDonator.amount.toLocaleString()} €<br><span class="mini secondary">(${
     data.biggestDonator.dons.length
   } don${data.biggestDonator.dons.length > 1 ? "s" : ""})</span>`;
   var _lastestDonatorPerso = "";
   for (let i = 0; i < data.donations.length && i < getLatestDonatorNb(); i++) {
-    _lastestDonatorPerso += `${data.donations[i].name}: ${data.donations[
+    _lastestDonatorPerso += `<span class="secondary">${data.donations[i].name}: </span>${data.donations[
       i
     ].amount.toLocaleString()} €`;
   }
@@ -148,6 +150,9 @@ const interval = () => {
 
   if (isRepeat()) {
     createPDuplicates("Cagnotte", 10, getSpacingRepeat());
+  }
+  for (let i = 0; i < secondaryColor.length; i++) {
+    secondaryColor[i].style.color = getTxtColor2();
   }
 };
 

@@ -5,9 +5,12 @@ import { join } from 'path';
 import { Server } from "socket.io";
 import getAllDatas, { getBiggestDonator, getGlobal, getGlobalObjectif, getNational, getUserDatas } from "./readData";
 import GetDatasFromSheet from './gsheet';
+import { debug, LoggerFile } from '@gscript/gtools';
 
 export const DebugMode = true;
 const timeBetweenGoogleRequest = 30; // in seconds
+debug.cls();
+LoggerFile.start('datas/logs');
 
 // NOTE: =================== Initialisations =================== //
 const domain = 'http://localhost';
@@ -58,6 +61,11 @@ app.get("/d/:file", (req, res) => {
     if (!f.endsWith('.json')) f += '.json';
     res.sendFile(join(__dirname, `../datas/${f}`));
 });
+app.get("/l/:file", (req, res) => {
+    var f = req.params.file;
+    if (!f.endsWith('.log')) f += '.log';
+    res.sendFile(join(__dirname, `../datas/logs/${f}`));
+});
 app.get("/widget/:name", (req, res) => {
     var f = 'widget/index.html';
     res.sendFile(join(__dirname, `../web/${f}`));
@@ -73,11 +81,6 @@ app.get("/:folder/:subfolder/:file", controlPanel);
 
 // NOTE: =================== Sockets =================== //
 io.on('connection', (socket) => {
-    console.log('a user connected');
-    socket.on('disconnect', () => {
-        console.log('user disconnected');
-    });
-
     socket.emit('biggestDonator', getBiggestDonator());
     socket.emit('global', getGlobal());
     socket.emit('globalObjectif', getGlobalObjectif());
@@ -122,7 +125,7 @@ const Start = async () => {
 
 // NOTE: =================== Server starting =================== //
 server.listen(port, () => {
-    console.log(`server running at ${domain}:${port}`);
+    debug.log(`server running at ${domain}:${port}`);
     Start();
 });
 
