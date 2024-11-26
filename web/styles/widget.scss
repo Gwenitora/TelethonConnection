@@ -1,12 +1,15 @@
 $warlockColor: #6a83ff;
 $errorColor: #ff6b6b;
 
+@import 'fonts.scss';
+
 * {
     margin: 0 ! important;
     padding: 0 ! important;
     overflow: hidden;
     text-align: center;
-    font-family: Arial, sans-serif;
+    font-family: Matter;
+    font-weight: bolder;
 
     body {
         background-color: #00000000;
@@ -19,10 +22,13 @@ $errorColor: #ff6b6b;
             justify-content: center;
             align-items: center;
             color: #ffffff;
+            overflow: visible;
 
             > div {
+                overflow: visible;
                 > p {
                     width: fit-content;
+                    position: relative;
                 }
             }
         }

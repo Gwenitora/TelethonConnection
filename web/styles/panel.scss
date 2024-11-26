@@ -2,6 +2,8 @@ $warlockColor: #6a83ff;
 $errorColor: #ff6b6b;
 $bgColor: #2d2d2d;
 
+@import 'fonts.scss';
+
 * {
     body {
         background-color: $bgColor;

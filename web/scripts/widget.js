@@ -27,11 +27,12 @@ const isBiggestDonatorGlobal = () =>
 const getPseudo = () => getCurrentURL().split("/")[4].split("?")[0];
 const getTxtColor = () => "#" + (params.get("txtColor") || "000000");
 const getTxtColor2 = () => "#" + (params.get("txtColor2") || "777777");
-const getBgColor = () => "#" + (params.get("bgColor") || "ffffff00");
+const getBgColor = () => isRepeat() ? "#ffffff00" : ("#" + (params.get("bgColor") || "ffffff00"));
 const getBorderRadius = () => params.get("borderR") || 100;
 const getFontSize = () => params.get("fontS") || 25;
 const isRepeat = () => params.get("repeat") !== null;
 const getSpacingRepeat = () => params.get("spacing") || 50;
+const getMoving = () => isRepeat() ? (params.get("moving") || 0) : 0;
 
 const getFormat = () => {
   if (
@@ -207,5 +208,30 @@ function createPDuplicates(originalId, numDuplicates, spacing) {
   }
 }
 
-setInterval(interval, 50);
+// défilement
+const defil = async () => {
+  var lastTimestamp = Date.now();
+  cagnotte.style.left = "0px";
+  while (true) {
+    await new Promise((resolve) => setTimeout(resolve, 1000 / 60));
+    interval();
+    const currentTimestamp = Date.now();
+    const deltaTime = currentTimestamp - lastTimestamp;
+    lastTimestamp = currentTimestamp;
+  
+    const moving = getMoving();
+    if (moving === 0) continue;
+    const bound = cagnotte.getBoundingClientRect();
+  
+    cagnotte.style.left = `${parseFloat(cagnotte.style.left || 0) + moving * deltaTime / 1000}px`;
+
+    if (parseFloat(bound.right) <= 0 && moving < 0) {
+      cagnotte.style.left = `${parseFloat(cagnotte.style.left || 0) + bound.width + getSpacingRepeat()}px`;
+    } else if (parseFloat(bound.left) >= window.innerWidth && moving > 0) {
+      cagnotte.style.left = `${parseFloat(cagnotte.style.left || 0) - bound.width - getSpacingRepeat()}px`;
+    }
+  }
+}
+
+defil();
 interval();

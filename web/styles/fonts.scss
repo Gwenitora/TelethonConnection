@@ -1,0 +1,81 @@
+@font-face {
+    font-family: Matter;
+    src: url(/fonts/Matter-Bold.ttf);
+    font-weight: bolder;
+}
+
+@font-face {
+    font-family: Matter;
+    src: url(/fonts/Matter-BoldItalic.ttf);
+    font-weight: bolder;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: Matter;
+    src: url(/fonts/Matter-SemiBold.ttf);
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: Matter;
+    src: url(/fonts/Matter-SemiBoldItalic.ttf);
+    font-weight: bold;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: Matter;
+    src: url(/fonts/Matter-Regular.ttf);
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: Matter;
+    src: url(/fonts/Matter-RegularItalic.ttf);
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: Matter;
+    src: url(/fonts/Matter-Medium.ttf);
+    font-weight: lighter;
+}
+
+@font-face {
+    font-family: Matter;
+    src: url(/fonts/Matter-MediumItalic.ttf);
+    font-weight: lighter;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: MatterExtrem;
+    src: url(/fonts/Matter-Heavy.ttf);
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: MatterExtrem;
+    src: url(/fonts/Matter-HeavyItalic.ttf);
+    font-weight: bold;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: MatterExtrem;
+    src: url(/fonts/Matter-Light.ttf);
+    font-weight: lighter;
+}
+
+@font-face {
+    font-family: MatterExtrem;
+    src: url(/fonts/Matter-LightItalic.ttf);
+    font-weight: lighter;
+    font-style: italic;
+}
+
+* {
+    font-family: Matter;
+}

@@ -49,6 +49,9 @@ const repeatation = document.getElementById("repeatation");
 const spacing = document.getElementById("spacing");
 const spacingPreview = document.getElementById("spacingPreview");
 
+const moving = document.getElementById("moving");
+const movingPreview = document.getElementById("movingPreview");
+
 var pseudo = undefined;
 var collectLink = undefined;
 var previewLink = "/widget";
@@ -102,11 +105,24 @@ const generateLink = () => {
       }
     }
   }
+  var transp = Math.round(parseFloat(bgTransparency.value) / 100 * 255).toString(16);
   if (repeatation.checked) {
+    transp = '00';
     options.push("repeat");
     if (spacing.value !== "50") {
       options.push(`spacing=${spacing.value}`);
     }
+    if (moving.value !== "0") {
+      options.push(`moving=${moving.value}`);
+    }
+  }
+  if (transp.length <= 1) transp = "0" + transp;
+  if (
+    bgColor.value + transp !== "0" &&
+    bgColor.value + transp !== "#ffffff00" &&
+    transp !== "00"
+  ) {
+    options.push(`bgColor=${(bgColor.value + transp).replace("#", "")}`);
   }
   if (format.Complete.checked && (CagnType.Perso.checked || CagnType.Global.checked)) {
     options.push("complete");
@@ -115,15 +131,6 @@ const generateLink = () => {
   }
   if (txtColor.value !== "" && txtColor.value !== "#000000") {
     options.push(`txtColor=${txtColor.value.replace("#", "")}`);
-  }
-  var transp = Math.round(parseFloat(bgTransparency.value) / 100 * 255).toString(16);
-  if (transp.length <= 1) transp = "0" + transp;
-  if (
-    bgColor.value + transp !== "0" &&
-    bgColor.value + transp !== "#ffffff00" &&
-    transp !== "00"
-  ) {
-    options.push(`bgColor=${(bgColor.value + transp).replace("#", "")}`);
   }
   if (borderRadius.value !== "100" && transp !== "00") {
     options.push(`borderR=${borderRadius.value}`);
@@ -233,3 +240,8 @@ const updateSpacing = () => {
   spacingPreview.innerText = spacing.value;
 };
 updateSpacing();
+
+const updateMoving = () => {
+  movingPreview.innerText = moving.value;
+};
+updateMoving();

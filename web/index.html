@@ -41,8 +41,9 @@
             
             <label><br><input type="checkbox" name="repeatation" title="Ajoute une répétition vertical" id="repeatation">Ajoute une répétition vertical</label><br>
             <label><br>Taille de la séparation: <span id="spacingPreview"></span>px<input type="range" name="spacing" title="Taille de la séparation" id="spacing" value="50" min="0" max="2000" step="1" oninput="updateSpacing()"></label><br>
+            <label><br>Vitesse de défilement: <span id="movingPreview"></span>px/sec<input type="range" name="moving" title="Vitesse de la défilement" id="moving" value="0" min="-100" max="100" step="1" oninput="updateMoving()"></label><br>
 
-            <p class="warn"><br>Il est déconseiller de toucher au prochains paramètres, malgré que cela reste possible</p>
+            <p class="warn"><br>Il est déconseiller de toucher au prochain paramètre, malgré que cela reste possible</p>
             <label>Taille de la police: <span id="fontSizePreview"></span>px<input type="range" name="fontSize" title="Taille de la police" id="fontSize" value="25" min="1" max="1000" step="1" oninput="updateFontSize()"></label><br>
             
             <p class="warn"><br>La taille (qui suit) n'a aucun effet sur l'asset final, mais vous permet de faire des test avant d'importer dans obs studio ou streamlab</p>
