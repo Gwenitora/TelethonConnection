@@ -213,25 +213,24 @@ const defil = async () => {
   var lastTimestamp = Date.now();
   cagnotte.style.left = "0px";
   while (true) {
-    await new Promise((resolve) => setTimeout(resolve, 1000 / 60));
     interval();
+    await new Promise((resolve) => setTimeout(resolve, 1000 / 60));
     const currentTimestamp = Date.now();
     const deltaTime = currentTimestamp - lastTimestamp;
     lastTimestamp = currentTimestamp;
-  
+    
     const moving = getMoving();
     if (moving === 0) continue;
     const bound = cagnotte.getBoundingClientRect();
-  
-    cagnotte.style.left = `${parseFloat(cagnotte.style.left || 0) + moving * deltaTime / 1000}px`;
-
+    
+    cagnotte.style.left = `${parseFloat(cagnotte.style.left || '0') + moving * deltaTime / 1000}px`;
+    
     if (parseFloat(bound.right) <= 0 && moving < 0) {
-      cagnotte.style.left = `${parseFloat(cagnotte.style.left || 0) + bound.width + getSpacingRepeat()}px`;
+      cagnotte.style.left = `${parseFloat(cagnotte.style.left || '0') + bound.width + getSpacingRepeat()}px`;
     } else if (parseFloat(bound.left) >= window.innerWidth && moving > 0) {
-      cagnotte.style.left = `${parseFloat(cagnotte.style.left || 0) - bound.width - getSpacingRepeat()}px`;
+      cagnotte.style.left = `${parseFloat(cagnotte.style.left || '0') - bound.width - getSpacingRepeat()}px`;
     }
   }
 }
 
 defil();
-interval();
