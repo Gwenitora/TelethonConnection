@@ -319,7 +319,9 @@ export const getUserDatas = async (userInfo: string): Promise<UserDatas | undefi
 export const getUserSuggestion = async (): Promise<string[]> => {
     const datas = await fs.readFile(path.resolve(__dirname, '../datas/datas.json'), 'utf-8');
     const users: UserDatas[] = JSON.parse(datas);
-    const finaleDatas = users.map((user) => user.name);
+    const finaleDatas = users.map((user) => user.name).sort((a, b) => {
+        return a.toLowerCase().localeCompare(b.toLowerCase(), 'fr', { sensitivity: 'base' });
+    });
     return finaleDatas;
 }
 
