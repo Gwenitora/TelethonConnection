@@ -4,12 +4,9 @@ import { google } from "googleapis";
 import fs from 'fs';
 import path from "path";
 
-const ID_CLIENT = env.ID_CLIENT!;
-const SECRET_CLIENT = env.SECRET_CLIENT!;
 const API_KEY = env.API_KEY!;
 const SHEET_ID = env.SHEET_ID!;
 const SHEET_NAME = env.SHEET_NAME!;
-const REDIRECT_URI = 'http://127.0.0.1:' + port;
 const RANGE = SHEET_NAME + '!F2:F10000';
 
 const GetDatasFromSheet = async () => {
