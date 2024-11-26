@@ -10,7 +10,7 @@ const API_KEY = env.API_KEY!;
 const SHEET_ID = env.SHEET_ID!;
 const SHEET_NAME = env.SHEET_NAME!;
 const REDIRECT_URI = 'http://127.0.0.1:' + port;
-const RANGE = SHEET_NAME + '!F2:F300';
+const RANGE = SHEET_NAME + '!F2:F10000';
 
 const GetDatasFromSheet = async () => {
     try {
