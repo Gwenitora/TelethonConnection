@@ -9,7 +9,7 @@ import { debug, env, LoggerFile } from '@gscript/gtools';
 
 
 // NOTE: =================== Setup =================== //
-export const DebugMode = true;
+export const DebugMode = false;
 const timeBetweenGoogleRequest = 30; // in seconds
 
 // NOTE: =================== Initialisations =================== //

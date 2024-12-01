@@ -206,6 +206,7 @@ const getAllNames = async (): Promise<string[]> => {
 const getAllDatas = async (): Promise<number> => {
 
     // init les variables
+    var Msgs: string[] = []
     var _lastJson;
     try {
         _lastJson = await fs.readFile(path.resolve(__dirname, '../datas/datas.json'), 'utf-8');
@@ -268,6 +269,9 @@ const getAllDatas = async (): Promise<number> => {
         } catch (err) { debug.logErr(err); }
 
     }
+
+    Msgs = usersData.map(e => e.donations.map(f => f.message)).flat().filter(e => e !== undefined);
+    await fs.writeFile(path.resolve(__dirname, '../datas/msg.json'), JSON.stringify(Msgs, null, 4));
 
     // sauvegarder la data que si un changement a été effectué
     if (lastJson !== JSON.stringify(usersData, null, DebugMode ? 4 : 0)) {
