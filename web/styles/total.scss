@@ -1,0 +1,30 @@
+@import "widget.scss";
+
+* {
+    body {
+        background-color: black;
+
+        div#Container {
+            flex-direction: column;
+            gap: 1vh;
+            justify-content: left;
+
+            h1 {
+                font-size: 4em;
+                color: darken(#a20352ff, 0%);
+            }
+
+            div {
+                p#Cagnotte {
+                    font-size: 15em !important;
+                    top: 0px;
+                    color: white !important;
+                }
+            }
+
+            img {
+                width: 80vw;
+            }
+        }
+    }
+}

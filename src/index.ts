@@ -90,6 +90,10 @@ app.get("/widget", (req, res) => {
     var f = 'widget/index.html';
     res.sendFile(join(__dirname, `../web/${f}`));
 });
+app.get("/total", (req, res) => {
+    var f = 'total/index.html';
+    res.sendFile(join(__dirname, `../web/${f}`));
+});
 app.get("/", controlPanel);
 app.get("/:file", controlPanel);
 app.get("/:folder/:file", controlPanel);
