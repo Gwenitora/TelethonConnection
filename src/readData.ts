@@ -65,7 +65,7 @@ const listOfPageTypes = [
 ]
 const page = "https://mapage.telethon.fr/#/"
 const moneyPage = "https://mapage.telethon.fr/ajax/goal/peer?templatePeerId=5269&templateCollectorId="
-const donorsPage = "https://mapage.telethon.fr/ajax/peer/donor/list/#?limitStart=0&limitLength=999999"
+const donorsPage = "https://mapage.telethon.fr/ajax/peer/donor/list/#?limitStart=0&limitLength=19"
 const regexToId: [string, string] = ['"https://mapage.telethon.fr/qrcode/', '"'];
 const nationalPage = "https://widgets.afm-telethon.fr/widget/compteur-national";
 
