@@ -15,6 +15,7 @@ const cagnotte = document.getElementById("Cagnotte");
 const container = document.getElementById("Container");
 const secondaryColor = document.getElementsByClassName("secondary");
 const manualSeperation = document.getElementsByClassName("manualSeperation");
+const bestDonator = document.getElementById("BestDonator");
 
 const isGlobal = () => getCurrentURL().split("/").length <= 4;
 const isNational = () => params.get("national") !== null && isGlobal();
@@ -64,18 +65,14 @@ const getFormat = () => {
 };
 
 socket.on("biggestDonator", (data) => {
-  biggestDonatorGlobal = `<span class="secondary">${data.name}: </span>${
-    data.amount
-  } €<br><span class="mini secondary">(${data.dons.length} don${
-    data.dons.length > 1 ? "s" : ""
-  } pour ${
-    data.dons.map((d) => d.for).filter((e, i, a) => a.indexOf(e) === i).length
-  } streamer${
-    data.dons.map((d) => d.for).filter((e, i, a) => a.indexOf(e) === i).length >
-    1
+  biggestDonatorGlobal = `<span class="secondary">${data.name}: </span>${data.amount
+    } €<br><span class="mini secondary">(${data.dons.length} don${data.dons.length > 1 ? "s" : ""
+    } pour ${data.dons.map((d) => d.for).filter((e, i, a) => a.indexOf(e) === i).length
+    } streamer${data.dons.map((d) => d.for).filter((e, i, a) => a.indexOf(e) === i).length >
+      1
       ? "s"
       : ""
-  })</span></p>`;
+    })</span></p>`;
 });
 
 socket.on("global", (data) => {
@@ -109,11 +106,9 @@ socket.on("personal", (data) => {
   }
   recolted = data.money;
   objectif = data.objectif;
-  biggestDonatorPerso = `<span class="secondary">${
-    data.biggestDonator.name
-  }: </span>${data.biggestDonator.amount.toLocaleString()} €<br><span class="mini secondary">(${
-    data.biggestDonator.dons.length
-  } don${data.biggestDonator.dons.length > 1 ? "s" : ""})</span>`;
+  biggestDonatorPerso = `<span class="secondary">${data.biggestDonator.name
+    }: </span>${data.biggestDonator.amount.toLocaleString()} €<br><span class="mini secondary">(${data.biggestDonator.dons.length
+    } don${data.biggestDonator.dons.length > 1 ? "s" : ""})</span>`;
   var _lastestDonatorPerso = "";
   for (let i = 0; i < data.donations.length && i < getLatestDonatorNb(); i++) {
     _lastestDonatorPerso += `<span class="secondary">${data.donations[i].name}: </span>${data.donations[
@@ -139,16 +134,21 @@ const interval = () => {
   container.style.backgroundColor = getBgColor();
   container.style.borderRadius =
     (getBorderRadius() / 200) *
-      Math.min(container.clientWidth, container.clientHeight) +
+    Math.min(container.clientWidth, container.clientHeight) +
     "px";
   cagnotte.innerHTML = firstInitFinished
     ? getFormat()
-        .replaceAll("$O", objectif.toLocaleString())
-        .replaceAll("$R", recolted.toLocaleString())
-        .replaceAll("$b", biggestDonatorPerso)
-        .replaceAll("$l", lastestDonatorPerso)
-        .replaceAll("$B", biggestDonatorGlobal)
+      .replaceAll("$O", objectif.toLocaleString())
+      .replaceAll("$R", recolted.toLocaleString())
+      .replaceAll("$b", biggestDonatorPerso)
+      .replaceAll("$l", lastestDonatorPerso)
+      .replaceAll("$B", biggestDonatorGlobal)
     : "";
+
+  if (bestDonator !== null) {
+    bestDonator.innerHTML = firstInitFinished
+      ? biggestDonatorGlobal : "";
+  }
 
   for (let i = 0; i < manualSeperation.length; i++) {
     manualSeperation[i].style.width = getSpacingRepeat() + "px";
@@ -190,9 +190,8 @@ function createPDuplicates(originalId, numDuplicates, spacing) {
         : document.getElementById(`${originalId}-left-${i}`);
     leftClone.id = `${originalId}-left-${i}`;
     leftClone.style.position = "absolute";
-    leftClone.style.left = `${
-      originalLeft - i * originalPosition.width - i * spacing
-    }px`;
+    leftClone.style.left = `${originalLeft - i * originalPosition.width - i * spacing
+      }px`;
     leftClone.style.top = `${originalTop}px`;
     leftClone.innerHTML = originalElement.innerHTML;
     container.appendChild(leftClone);
@@ -203,9 +202,8 @@ function createPDuplicates(originalId, numDuplicates, spacing) {
         : document.getElementById(`${originalId}-right-${i}`);
     rightClone.id = `${originalId}-right-${i}`;
     rightClone.style.position = "absolute";
-    rightClone.style.left = `${
-      originalLeft + i * originalPosition.width + i * spacing
-    }px`;
+    rightClone.style.left = `${originalLeft + i * originalPosition.width + i * spacing
+      }px`;
     rightClone.style.top = `${originalTop}px`;
     rightClone.innerHTML = originalElement.innerHTML;
     container.appendChild(rightClone);
@@ -222,13 +220,13 @@ const defil = async () => {
     const currentTimestamp = Date.now();
     const deltaTime = currentTimestamp - lastTimestamp;
     lastTimestamp = currentTimestamp;
-    
+
     const moving = getMoving();
     if (moving === 0) continue;
     const bound = cagnotte.getBoundingClientRect();
-    
+
     cagnotte.style.left = `${parseFloat(cagnotte.style.left || '0') + moving * deltaTime / 1000}px`;
-    
+
     if (parseFloat(bound.right) <= 0 && moving < 0) {
       cagnotte.style.left = `${parseFloat(cagnotte.style.left || '0') + bound.width + getSpacingRepeat()}px`;
     } else if (parseFloat(bound.left) >= window.innerWidth && moving > 0) {
