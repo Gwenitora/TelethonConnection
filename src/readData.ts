@@ -165,7 +165,7 @@ const getDonations = async (user: string, decal: number = 0): Promise<UserDatas[
     var donationsList: UserDatas["donations"] = [];
     for (let i = 1; i < donations.length; i++) {
         const name = donations[i].split('class="donor-name">                    <strong>')[1].split(' a donné ')[0];
-        const amount = donations[i].split(' a donné ')[1].split(' €')[0];
+        const amount = donations[i].split(' a donné ')[1].split(' €')[0].replaceAll(" ", "");
         const date = donations[i].split('>- ')[1].split('<')[0];
         var message = "";
         try {
