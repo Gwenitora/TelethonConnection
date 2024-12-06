@@ -207,6 +207,25 @@ const getAllDatas = async (): Promise<number> => {
 
     // init les variables
     var Msgs: string[] = []
+    var resume: {
+        total: number,
+        objectif: number,
+        nbDons: number,
+        nbDonsWithMsg: number,
+        nbDonsAnonyme: number,
+        moyDon: number,
+        moyStreamerCagnotte: number,
+        biggestDonator: BiggestDonatorFor,
+        biggestDon: {
+            amount: number,
+            date: string,
+            message?: string
+        },
+        nbStreamer: number,
+        nbStreamerHasObjectif: number,
+        nbStreamerEmpty: number,
+        biggestStreamer: UserDatas,
+    } = {} as any
     var _lastJson;
     try {
         _lastJson = await fs.readFile(path.resolve(__dirname, '../datas/datas.json'), 'utf-8');
@@ -270,16 +289,13 @@ const getAllDatas = async (): Promise<number> => {
 
     }
 
-    Msgs = usersData.map(e => e.donations.map(f => f.message)).flat().filter(e => e !== undefined);
-    await fs.writeFile(path.resolve(__dirname, '../datas/msg.json'), JSON.stringify(Msgs, null, 4));
-
     // sauvegarder la data que si un changement a été effectué
     if (lastJson !== JSON.stringify(usersData, null, DebugMode ? 4 : 0)) {
         await fs.writeFile(path.resolve(__dirname, '../datas/datas.json'), JSON.stringify(usersData, null, DebugMode ? 4 : 0));
     }
 
     // récupération du plus gros donateur
-    const AllDonators = usersData.map(
+    const AllDonators = usersData.sort((a, b) => b.money - a.money).map(
         (user) => {
             return user.donations.map(
                 (don) => {
@@ -307,6 +323,30 @@ const getAllDatas = async (): Promise<number> => {
     global = usersData.map((user) => user.money).reduce((a, b) => a + b, 0);
     globalObjectif = usersData.map((user) => user.objectif).reduce((a, b) => a + b, 0);
     national = await getNationalSum();
+
+    // Stats Finals
+    Msgs = usersData.map(e => e.donations.map(f => f.message)).flat().filter(e => e !== undefined);
+    await fs.writeFile(path.resolve(__dirname, '../datas/msg.json'), JSON.stringify(Msgs, null, 4));
+
+    resume = {
+        total: global,
+        objectif: globalObjectif,
+        nbDons: usersData.map(e => e.donations.length).reduce((a, b) => a + b, 0),
+        nbDonsWithMsg: usersData.map(e => e.donations.filter(f => f.message !== undefined).length).reduce((a, b) => a + b, 0),
+        nbDonsAnonyme: usersData.map(e => e.donations.filter(f => f.name === "Anonyme").length).reduce((a, b) => a + b, 0),
+        moyDon: global / usersData.map(e => e.donations.length).reduce((a, b) => a + b, 0),
+        moyStreamerCagnotte: global / usersData.length,
+        biggestDonator: biggestDonator,
+        biggestDon: usersData.map(e => e.donations).flat().sort((a, b) => b.amount - a.amount)[0],
+        nbStreamer: usersData.length,
+        nbStreamerHasObjectif: usersData.filter(e => e.objectif <= e.money).length,
+        nbStreamerEmpty: usersData.filter(e => e.money === 0).length,
+        biggestStreamer: usersData.sort((a, b) => b.money - a.money)[0]
+    }
+    resume.moyDon = Math.round(resume.moyDon * 1000) / 1000;
+    resume.moyStreamerCagnotte = Math.round(resume.moyStreamerCagnotte * 1000) / 1000;
+    await fs.writeFile(path.resolve(__dirname, '../datas/resume.json'), JSON.stringify(resume, null, 4));
+
     return global;
 }
 
