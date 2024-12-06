@@ -9,12 +9,12 @@ import { debug, env, LoggerFile } from '@gscript/gtools';
 
 
 // NOTE: =================== Setup =================== //
-export const DebugMode = false;
+export const DebugMode = true;
 const timeBetweenGoogleRequest = 30; // in seconds
 
 // NOTE: =================== Initialisations =================== //
 const domain = env.DOMAIN!;
-export const port = 3000;
+export const port = env.PORT;
 const app = express();
 const server = createServer(app);
 const io = new Server(server);
